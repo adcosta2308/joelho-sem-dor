@@ -13,62 +13,74 @@ export default function TrilhasPage() {
     {
       id: 'condromalacia',
       nome: 'Condromalácia',
-      descricao: 'Programa completo para fortalecer e aliviar dor na patela',
+      descricao: 'Fortaleça os músculos que protegem sua patela e reduza a pressão no joelho em até 30 dias.',
       duracao: '30 dias',
       nivel: 'Iniciante',
       premium: false,
       icon: '🎯',
       cor: 'from-[#2F66F2] to-[#70CFFF]',
+      selo: 'Ideal para dor na frente do joelho',
+      resultado: 'Resultado esperado: redução significativa da dor ao subir escadas e agachar em 3–4 semanas.',
     },
     {
       id: 'agachar',
       nome: 'Dor ao Agachar',
-      descricao: 'Recupere a capacidade de agachar sem dor',
+      descricao: 'Recupere sua capacidade de agachar sem dor com correção de movimento e fortalecimento direcionado.',
       duracao: '21 dias',
       nivel: 'Iniciante',
       premium: true,
       icon: '💪',
       cor: 'from-purple-500 to-pink-500',
+      selo: 'Progressão segura',
+      resultado: 'Resultado esperado: agachamento sem dor em 2–3 semanas.',
     },
     {
       id: 'escada',
       nome: 'Dor na Escada',
-      descricao: 'Suba e desça escadas com confiança',
+      descricao: 'Melhore estabilidade e força para subir e descer escadas sem incômodo.',
       duracao: '21 dias',
       nivel: 'Iniciante',
       premium: true,
       icon: '🪜',
       cor: 'from-orange-500 to-red-500',
+      selo: 'Especial para iniciantes',
+      resultado: 'Resultado esperado: menos dor ao subir escadas em 2–3 semanas.',
     },
     {
       id: 'sobrepeso',
       nome: 'Sobrepeso + Joelho',
-      descricao: 'Exercícios adaptados para proteger suas articulações',
+      descricao: 'Exercícios sem impacto para fortalecer e proteger suas articulações.',
       duracao: '30 dias',
       nivel: 'Iniciante',
       premium: true,
       icon: '⚖️',
       cor: 'from-green-500 to-teal-500',
+      selo: 'Sem impacto',
+      resultado: 'Resultado esperado: fortalecimento articular e redução de sobrecarga em 4 semanas.',
     },
     {
       id: 'volta-treinos',
       nome: 'Volta aos Treinos',
-      descricao: 'Retorne à academia com segurança',
+      descricao: 'Retorne à academia com segurança e movimentos que não sobrecarregam o joelho.',
       duracao: '28 dias',
       nivel: 'Intermediário',
       premium: true,
       icon: '🏋️',
       cor: 'from-blue-500 to-cyan-500',
+      selo: 'Progressão segura',
+      resultado: 'Resultado esperado: retorno seguro aos treinos em 3–4 semanas.',
     },
     {
       id: 'corrida',
       nome: 'Corrida Iniciante',
-      descricao: 'Prepare seu joelho para correr sem dor',
+      descricao: 'Prepare seu joelho para correr com técnica, mobilidade e força.',
       duracao: '30 dias',
       nivel: 'Intermediário',
       premium: true,
       icon: '🏃',
       cor: 'from-indigo-500 to-purple-500',
+      selo: 'Progressão segura',
+      resultado: 'Resultado esperado: joelho preparado para corrida em 4 semanas.',
     },
   ];
 
@@ -77,10 +89,12 @@ export default function TrilhasPage() {
       <Navigation />
       
       {/* Header */}
-      <header className="bg-gradient-to-br from-[#2F66F2] to-[#70CFFF] text-white pt-12 pb-8 px-6">
+      <header className="bg-gradient-to-br from-[#2F66F2] to-[#70CFFF] text-white pt-12 pb-10 px-6">
         <div className="max-w-md mx-auto">
-          <h1 className="text-3xl font-bold mb-2">Trilhas de 30 Dias</h1>
-          <p className="text-white/80">Programas completos para diferentes objetivos</p>
+          <h1 className="text-3xl font-bold mb-3">Escolha a trilha ideal para sua dor no joelho</h1>
+          <p className="text-white/90 text-base leading-relaxed">
+            Programas de 21 a 30 dias com exercícios terapêuticos, progressão segura e resultados reais.
+          </p>
         </div>
       </header>
 
@@ -114,9 +128,23 @@ export default function TrilhasPage() {
                         )}
                       </div>
                       
-                      <p className="text-gray-600 text-sm mb-4">{trilha.descricao}</p>
+                      {/* Selo */}
+                      <div className="mb-3">
+                        <span className="inline-block bg-blue-50 text-blue-700 text-xs font-semibold px-3 py-1 rounded-full">
+                          {trilha.selo}
+                        </span>
+                      </div>
                       
-                      <div className="flex items-center gap-4 text-sm text-gray-500">
+                      <p className="text-gray-700 text-sm mb-3 leading-relaxed">{trilha.descricao}</p>
+                      
+                      {/* Resultado esperado */}
+                      <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
+                        <p className="text-green-800 text-xs leading-relaxed">
+                          {trilha.resultado}
+                        </p>
+                      </div>
+                      
+                      <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
                         <div className="flex items-center gap-1">
                           <Clock className="w-4 h-4" />
                           <span>{trilha.duracao}</span>
@@ -130,7 +158,7 @@ export default function TrilhasPage() {
                       {bloqueado ? (
                         <button
                           onClick={() => router.push('/premium')}
-                          className="mt-4 w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-semibold py-3 px-6 rounded-xl transition-all flex items-center justify-center gap-2"
+                          className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-semibold py-3 px-6 rounded-xl transition-all flex items-center justify-center gap-2"
                         >
                           <Lock className="w-4 h-4" />
                           Desbloquear com Premium
@@ -138,7 +166,7 @@ export default function TrilhasPage() {
                       ) : (
                         <button
                           onClick={() => router.push('/plano')}
-                          className={`mt-4 w-full bg-gradient-to-r ${trilha.cor} hover:opacity-90 text-white font-semibold py-3 px-6 rounded-xl transition-all`}
+                          className={`w-full bg-gradient-to-r ${trilha.cor} hover:opacity-90 text-white font-semibold py-3 px-6 rounded-xl transition-all`}
                         >
                           Iniciar trilha
                         </button>
