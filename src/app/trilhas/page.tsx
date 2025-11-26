@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { Lock, Clock, TrendingUp, Target } from 'lucide-react';
+import { Lock, Clock, TrendingUp } from 'lucide-react';
 import Navigation from '@/components/custom/navigation';
 import { useAppStore } from '@/lib/store';
 
@@ -21,6 +21,7 @@ export default function TrilhasPage() {
       cor: 'from-[#2F66F2] to-[#70CFFF]',
       selo: 'Ideal para dor na frente do joelho',
       resultado: 'Resultado esperado: redução significativa da dor ao subir escadas e agachar em 3–4 semanas.',
+      rota: '/trilhas/condromalaciа',
     },
     {
       id: 'agachar',
@@ -28,11 +29,12 @@ export default function TrilhasPage() {
       descricao: 'Recupere sua capacidade de agachar sem dor com correção de movimento e fortalecimento direcionado.',
       duracao: '21 dias',
       nivel: 'Iniciante',
-      premium: true,
+      premium: false,
       icon: '💪',
       cor: 'from-purple-500 to-pink-500',
       selo: 'Progressão segura',
       resultado: 'Resultado esperado: agachamento sem dor em 2–3 semanas.',
+      rota: '/trilhas/dor-ao-agachar',
     },
     {
       id: 'escada',
@@ -166,8 +168,8 @@ export default function TrilhasPage() {
                       ) : (
                         <button
                           onClick={() => {
-                            if (trilha.id === 'condromalacia') {
-                              router.push('/trilhas/condromalaciа');
+                            if (trilha.rota) {
+                              router.push(trilha.rota);
                             } else {
                               router.push('/plano');
                             }
