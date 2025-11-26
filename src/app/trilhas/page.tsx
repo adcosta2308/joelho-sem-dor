@@ -165,7 +165,13 @@ export default function TrilhasPage() {
                         </button>
                       ) : (
                         <button
-                          onClick={() => router.push('/plano')}
+                          onClick={() => {
+                            if (trilha.id === 'condromalacia') {
+                              router.push('/trilhas/condromalaciа');
+                            } else {
+                              router.push('/plano');
+                            }
+                          }}
                           className={`w-full bg-gradient-to-r ${trilha.cor} hover:opacity-90 text-white font-semibold py-3 px-6 rounded-xl transition-all`}
                         >
                           Iniciar trilha
