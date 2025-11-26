@@ -1,12 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight, Play } from 'lucide-react';
+import { ArrowRight, Heart, Activity, BookOpen, LineChart } from 'lucide-react';
 import Navigation from '@/components/custom/navigation';
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#70CFFF]/10 to-white pb-20">
+    <div className="min-h-screen bg-gradient-to-b from-[#70CFFF]/10 to-white pb-24">
       <Navigation />
       
       {/* Header */}
@@ -19,18 +19,18 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="max-w-md mx-auto px-6 -mt-8">
-        {/* Hero Card */}
-        <div className="bg-white rounded-2xl shadow-lg p-8 mb-6">
-          <h2 className="text-2xl font-bold text-[#1C1C1C] mb-3">
+        {/* Hero Card - Mais compacto */}
+        <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
+          <h2 className="text-xl font-bold text-[#1C1C1C] mb-2">
             Seu alívio começa aqui
           </h2>
-          <p className="text-gray-600 mb-6 leading-relaxed">
+          <p className="text-gray-600 text-sm mb-5 leading-relaxed">
             Avalie sua dor e receba um plano personalizado em 2 minutos.
           </p>
           
           <Link 
             href="/avaliacao"
-            className="w-full bg-[#2F66F2] hover:bg-[#2557d6] text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-all duration-300 hover:scale-105 shadow-md"
+            className="w-full bg-[#2F66F2] hover:bg-[#2557d6] text-white font-semibold py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 transition-all duration-300 hover:scale-105 shadow-md mb-3"
           >
             Avaliar minha dor
             <ArrowRight className="w-5 h-5" />
@@ -38,34 +38,44 @@ export default function Home() {
           
           <Link 
             href="/trilhas"
-            className="block text-center text-[#2F66F2] font-medium mt-4 hover:underline"
+            className="block text-center text-[#2F66F2] font-medium text-sm hover:underline"
           >
             Ver exercícios
           </Link>
         </div>
 
-        {/* Features */}
-        <div className="space-y-4 mb-6">
+        {/* Features - Com espaçamento aumentado */}
+        <div className="space-y-5 mb-8">
           <FeatureCard
-            icon="🎯"
+            icon={<Heart className="w-7 h-7 text-[#2F66F2]" />}
             title="Avaliação Inteligente"
-            description="Identifique a causa da sua dor em minutos"
+            description="Identifique seu tipo de dor em poucos minutos."
           />
           <FeatureCard
-            icon="💪"
+            icon={<Activity className="w-7 h-7 text-[#2F66F2]" />}
             title="Treinos Personalizados"
-            description="Exercícios adaptados ao seu nível de dor"
+            description="Exercícios certos para o seu nível de dor e força."
           />
           <FeatureCard
-            icon="📚"
+            icon={<BookOpen className="w-7 h-7 text-[#2F66F2]" />}
             title="Aulas Rápidas"
-            description="Aprenda a cuidar do seu joelho"
+            description="Aprenda o que acelera e o que atrapalha sua recuperação."
           />
           <FeatureCard
-            icon="📊"
+            icon={<LineChart className="w-7 h-7 text-[#2F66F2]" />}
             title="Acompanhamento"
-            description="Monitore sua evolução semana a semana"
+            description="Monitore sua evolução com segurança, semana a semana."
           />
+        </div>
+
+        {/* CTA Secundário - Plano de Crise */}
+        <div className="mb-8">
+          <Link 
+            href="/crise"
+            className="block w-full text-center bg-white border-2 border-[#2F66F2] text-[#2F66F2] font-medium py-3.5 px-6 rounded-xl hover:bg-[#2F66F2] hover:text-white transition-all duration-300"
+          >
+            Minha dor piorou hoje
+          </Link>
         </div>
 
         {/* Social Login */}
@@ -96,14 +106,16 @@ export default function Home() {
   );
 }
 
-function FeatureCard({ icon, title, description }: { icon: string; title: string; description: string }) {
+function FeatureCard({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) {
   return (
-    <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+    <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
       <div className="flex items-start gap-4">
-        <span className="text-3xl">{icon}</span>
-        <div>
-          <h3 className="font-semibold text-[#1C1C1C] mb-1">{title}</h3>
-          <p className="text-sm text-gray-600">{description}</p>
+        <div className="flex-shrink-0 bg-[#70CFFF]/10 rounded-full p-3">
+          {icon}
+        </div>
+        <div className="flex-1">
+          <h3 className="font-semibold text-[#1C1C1C] mb-1.5 text-base">{title}</h3>
+          <p className="text-sm text-gray-600 leading-relaxed">{description}</p>
         </div>
       </div>
     </div>
