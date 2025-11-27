@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ArrowRight, Heart, Activity, BookOpen, LineChart, Play, Calendar, TrendingUp } from 'lucide-react';
+import { ArrowRight, Heart, Activity, BookOpen, LineChart, Play, Calendar, TrendingUp, User, Dumbbell, Brain, Target } from 'lucide-react';
 import Navigation from '@/components/custom/navigation';
 import { useAppStore } from '@/lib/store';
 
@@ -65,26 +65,33 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#70CFFF]/10 to-white pb-24">
+    <div className="min-h-screen bg-gradient-to-b from-[#36C2FF]/10 to-white pb-24">
       <Navigation />
       
-      {/* Header */}
-      <header className="bg-[#2F66F2] text-white pt-12 pb-16 px-6">
-        <div className="max-w-md mx-auto">
-          <h1 className="text-4xl font-bold mb-3">Joelho Sem Dor</h1>
-          <p className="text-[#70CFFF] text-lg">
-            {temProgresso ? `Olá${profile.nome ? `, ${profile.nome}` : ''}!` : 'Seu alívio começa aqui'}
+      {/* Header - Refinado com logo maior e melhor posicionamento */}
+      <header className="bg-gradient-to-br from-[#0A66C2] to-[#186FEC] text-white pt-10 pb-14 px-6">
+        <div className="max-w-md mx-auto flex flex-col items-center justify-center">
+          <div className="flex items-center gap-3 mb-3">
+            <img 
+              src="https://k6hrqrxuu8obbfwn.public.blob.vercel-storage.com/temp/2fd8a863-c8a1-4df9-b664-fde628c8aef4.png" 
+              alt="Orthoxis Logo" 
+              className="h-20 w-auto sm:h-24"
+            />
+          </div>
+          <h1 className="text-5xl sm:text-6xl font-bold mb-2">Orthoxis</h1>
+          <p className="text-white text-lg sm:text-xl font-medium text-center">
+            {temProgresso ? `Olá${profile.nome ? `, ${profile.nome}` : ''}!` : 'Seu joelho livre começa aqui'}
           </p>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="max-w-md mx-auto px-6 -mt-8">
+      <main className="max-w-md mx-auto px-6 -mt-6">
         {/* Modal de Retorno */}
         {mostrarRetorno && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6">
             <div className="bg-white rounded-2xl p-8 max-w-sm w-full">
-              <h3 className="text-xl font-bold text-[#1C1C1C] mb-3">
+              <h3 className="text-xl font-bold text-[#2B2F36] mb-3">
                 Que bom ter você de volta!
               </h3>
               <p className="text-gray-600 mb-6">
@@ -93,7 +100,7 @@ export default function Home() {
               <div className="space-y-3">
                 <button
                   onClick={retornarTreino}
-                  className="w-full bg-[#2F66F2] hover:bg-[#2557d6] text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300"
+                  className="w-full bg-[#0A66C2] hover:bg-[#186FEC] text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300"
                 >
                   Retomar treino
                 </button>
@@ -108,31 +115,31 @@ export default function Home() {
           </div>
         )}
 
-        {/* Card Principal - Dinâmico */}
+        {/* Card Principal - Refinado com menos peso visual */}
         {temProgresso ? (
-          <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
+          <div className="bg-white rounded-[20px] shadow-md p-6 mb-5">
             <div className="flex items-center justify-between mb-4">
               <div>
                 <p className="text-sm text-gray-600 mb-1">Sua trilha atual</p>
-                <h2 className="text-xl font-bold text-[#1C1C1C]">
+                <h2 className="text-xl font-bold text-[#2B2F36]">
                   {getNomeTrilha(progresso.trilhaAtual)}
                 </h2>
               </div>
-              <div className="bg-[#70CFFF]/20 rounded-full p-3">
-                <Activity className="w-6 h-6 text-[#2F66F2]" />
+              <div className="bg-[#36C2FF]/20 rounded-full p-3">
+                <Activity className="w-6 h-6 text-[#0A66C2]" strokeWidth={2} />
               </div>
             </div>
 
-            <div className="bg-[#70CFFF]/10 rounded-xl p-4 mb-5">
+            <div className="bg-[#36C2FF]/10 rounded-xl p-4 mb-5">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm text-gray-600">Progresso</span>
-                <span className="text-sm font-semibold text-[#2F66F2]">
+                <span className="text-sm font-semibold text-[#0A66C2]">
                   Dia {progresso.diasTreinados}
                 </span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
                 <div 
-                  className="bg-[#2F66F2] h-2 rounded-full transition-all duration-500"
+                  className="bg-[#0A66C2] h-2 rounded-full transition-all duration-500"
                   style={{ width: `${(progresso.diasTreinados / 30) * 100}%` }}
                 />
               </div>
@@ -140,7 +147,7 @@ export default function Home() {
 
             <button
               onClick={continuarTreino}
-              className="w-full bg-[#2F66F2] hover:bg-[#2557d6] text-white font-semibold py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 transition-all duration-300 hover:scale-105 shadow-md mb-3"
+              className="w-full bg-[#0A66C2] hover:bg-[#186FEC] text-white font-semibold py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 transition-all duration-300 hover:scale-105 shadow-md mb-3"
             >
               <Play className="w-5 h-5" />
               Continuar Dia {proximoDia}
@@ -148,23 +155,20 @@ export default function Home() {
 
             <Link 
               href="/trilhas"
-              className="block text-center text-[#2F66F2] font-medium text-sm hover:underline"
+              className="block text-center text-[#0A66C2] font-medium text-sm hover:underline"
             >
               Trocar de trilha
             </Link>
           </div>
         ) : (
-          <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
-            <h2 className="text-xl font-bold text-[#1C1C1C] mb-2">
-              Seu alívio começa aqui
-            </h2>
-            <p className="text-gray-600 text-sm mb-5 leading-relaxed">
+          <div className="bg-white rounded-[20px] shadow-md p-5 sm:p-6 mb-5">
+            <h2 className="text-lg sm:text-xl font-medium text-[#2B2F36] mb-4 leading-relaxed">
               Avalie sua dor e receba um plano personalizado em 2 minutos.
-            </p>
+            </h2>
             
             <Link 
               href="/onboarding"
-              className="w-full bg-[#2F66F2] hover:bg-[#2557d6] text-white font-semibold py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 transition-all duration-300 hover:scale-105 shadow-md mb-3"
+              className="w-full bg-[#0A66C2] hover:bg-[#186FEC] text-white font-semibold py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 transition-all duration-300 hover:scale-105 shadow-md mb-3 inline-flex"
             >
               Começar agora
               <ArrowRight className="w-5 h-5" />
@@ -172,7 +176,7 @@ export default function Home() {
             
             <Link 
               href="/trilhas"
-              className="block text-center text-[#2F66F2] font-medium text-sm hover:underline"
+              className="block text-center text-[#0A66C2] font-medium text-sm hover:underline"
             >
               Ver exercícios
             </Link>
@@ -181,54 +185,54 @@ export default function Home() {
 
         {/* Stats Rápidas - Se tem progresso */}
         {temProgresso && (
-          <div className="grid grid-cols-3 gap-3 mb-8">
+          <div className="grid grid-cols-3 gap-3 mb-5">
             <div className="bg-white rounded-xl p-4 text-center shadow-sm">
-              <Calendar className="w-5 h-5 text-[#2F66F2] mx-auto mb-2" />
-              <p className="text-2xl font-bold text-[#1C1C1C]">{progresso.diasTreinados}</p>
+              <Calendar className="w-5 h-5 text-[#0A66C2] mx-auto mb-2" strokeWidth={2} />
+              <p className="text-2xl font-bold text-[#2B2F36]">{progresso.diasTreinados}</p>
               <p className="text-xs text-gray-600">Dias</p>
             </div>
             <div className="bg-white rounded-xl p-4 text-center shadow-sm">
-              <TrendingUp className="w-5 h-5 text-[#2F66F2] mx-auto mb-2" />
-              <p className="text-2xl font-bold text-[#1C1C1C]">{Math.ceil(progresso.diasTreinados / 7)}</p>
+              <TrendingUp className="w-5 h-5 text-[#0A66C2] mx-auto mb-2" strokeWidth={2} />
+              <p className="text-2xl font-bold text-[#2B2F36]">{Math.ceil(progresso.diasTreinados / 7)}</p>
               <p className="text-xs text-gray-600">Semanas</p>
             </div>
             <div className="bg-white rounded-xl p-4 text-center shadow-sm">
-              <Heart className="w-5 h-5 text-[#2F66F2] mx-auto mb-2" />
-              <p className="text-2xl font-bold text-[#1C1C1C]">{profile.dorAtual}</p>
+              <Heart className="w-5 h-5 text-[#0A66C2] mx-auto mb-2" strokeWidth={2} />
+              <p className="text-2xl font-bold text-[#2B2F36]">{profile.dorAtual}</p>
               <p className="text-xs text-gray-600">Dor</p>
             </div>
           </div>
         )}
 
-        {/* Features */}
-        <div className="space-y-5 mb-8">
+        {/* Features - Ícones padronizados com estilo minimalista */}
+        <div className="space-y-3 mb-5">
           <FeatureCard
-            icon={<Heart className="w-7 h-7 text-[#2F66F2]" />}
+            icon={<User className="w-6 h-6 text-[#0A66C2]" strokeWidth={2} />}
             title="Avaliação Inteligente"
             description="Identifique seu tipo de dor em poucos minutos."
           />
           <FeatureCard
-            icon={<Activity className="w-7 h-7 text-[#2F66F2]" />}
+            icon={<Dumbbell className="w-6 h-6 text-[#0A66C2]" strokeWidth={2} />}
             title="Treinos Personalizados"
             description="Exercícios certos para o seu nível de dor e força."
           />
           <FeatureCard
-            icon={<BookOpen className="w-7 h-7 text-[#2F66F2]" />}
+            icon={<Brain className="w-6 h-6 text-[#0A66C2]" strokeWidth={2} />}
             title="Aulas Rápidas"
             description="Aprenda o que acelera e o que atrapalha sua recuperação."
           />
           <FeatureCard
-            icon={<LineChart className="w-7 h-7 text-[#2F66F2]" />}
+            icon={<Target className="w-6 h-6 text-[#0A66C2]" strokeWidth={2} />}
             title="Acompanhamento"
             description="Monitore sua evolução com segurança, semana a semana."
           />
         </div>
 
-        {/* CTA Secundário - Plano de Crise */}
-        <div className="mb-8">
+        {/* CTA Secundário - Plano de Crise - Reposicionado mais próximo */}
+        <div className="mb-6">
           <Link 
             href="/plano-crise"
-            className="block w-full text-center bg-white border-2 border-red-500 text-red-600 font-medium py-3.5 px-6 rounded-xl hover:bg-red-50 transition-all duration-300"
+            className="block w-full text-center bg-white border-2 border-red-500 text-red-600 font-semibold py-3.5 px-6 rounded-xl hover:bg-red-50 transition-all duration-300"
           >
             ⚠️ Minha dor piorou hoje
           </Link>
@@ -237,8 +241,8 @@ export default function Home() {
         {/* Social Login */}
         {!temProgresso && (
           <div className="bg-[#F2F4F7] rounded-2xl p-6">
-            <p className="text-center text-gray-600 text-sm mb-4">
-              Entre para salvar seu progresso
+            <p className="text-center text-[#2B2F36] text-sm font-medium mb-4">
+              Entre para salvar seu progresso e acompanhar sua evolução.
             </p>
             <div className="space-y-3">
               <button className="w-full bg-white border border-gray-300 text-gray-700 font-medium py-3 px-4 rounded-xl flex items-center justify-center gap-3 hover:bg-gray-50 transition-colors">
@@ -250,7 +254,7 @@ export default function Home() {
                 </svg>
                 Continuar com Google
               </button>
-              <button className="w-full bg-[#1C1C1C] text-white font-medium py-3 px-4 rounded-xl flex items-center justify-center gap-3 hover:bg-[#2d2d2d] transition-colors">
+              <button className="w-full bg-[#2B2F36] text-white font-medium py-3 px-4 rounded-xl flex items-center justify-center gap-3 hover:bg-[#3d4349] transition-colors">
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
                 </svg>
@@ -268,11 +272,11 @@ function FeatureCard({ icon, title, description }: { icon: React.ReactNode; titl
   return (
     <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
       <div className="flex items-start gap-4">
-        <div className="flex-shrink-0 bg-[#70CFFF]/10 rounded-full p-3">
+        <div className="flex-shrink-0 bg-[#36C2FF]/10 rounded-full p-3">
           {icon}
         </div>
         <div className="flex-1">
-          <h3 className="font-semibold text-[#1C1C1C] mb-1.5 text-base">{title}</h3>
+          <h3 className="font-bold text-[#2B2F36] mb-1.5 text-base">{title}</h3>
           <p className="text-sm text-gray-600 leading-relaxed">{description}</p>
         </div>
       </div>

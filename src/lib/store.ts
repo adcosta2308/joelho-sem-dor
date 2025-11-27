@@ -196,7 +196,7 @@ export const useAppStore = create<AppStore>()(
       marcarAulaVisualizada: (aulaId) => set({ ultimaAulaVisualizada: aulaId }),
     }),
     {
-      name: 'joelho-sem-dor-storage',
+      name: 'orthoxis-storage',
     }
   )
 );

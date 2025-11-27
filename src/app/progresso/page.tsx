@@ -54,11 +54,11 @@ export default function ProgressoPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#70CFFF]/10 to-white pb-24">
+    <div className="min-h-screen bg-gradient-to-b from-[#36C2FF]/10 to-white pb-24">
       <Navigation />
       
       {/* Header */}
-      <header className="bg-[#2F66F2] text-white pt-12 pb-16 px-6">
+      <header className="bg-gradient-to-br from-[#0A66C2] to-[#186FEC] text-white pt-12 pb-16 px-6">
         <div className="max-w-md mx-auto">
           <button
             onClick={() => router.push('/')}
@@ -71,7 +71,7 @@ export default function ProgressoPage() {
             <Trophy className="w-8 h-8" />
             <h1 className="text-3xl font-bold">Seu Progresso</h1>
           </div>
-          <p className="text-[#70CFFF]">
+          <p className="text-[#36C2FF]">
             Acompanhe sua evolução
           </p>
         </div>
@@ -81,18 +81,18 @@ export default function ProgressoPage() {
         {/* Stats Principais */}
         <div className="grid grid-cols-3 gap-3 mb-8">
           <div className="bg-white rounded-xl p-5 text-center shadow-lg">
-            <Calendar className="w-6 h-6 text-[#2F66F2] mx-auto mb-2" />
-            <p className="text-3xl font-bold text-[#1C1C1C]">{totalDias}</p>
+            <Calendar className="w-6 h-6 text-[#0A66C2] mx-auto mb-2" />
+            <p className="text-3xl font-bold text-[#2B2F36]">{totalDias}</p>
             <p className="text-xs text-gray-600 mt-1">Dias concluídos</p>
           </div>
           <div className="bg-white rounded-xl p-5 text-center shadow-lg">
-            <TrendingUp className="w-6 h-6 text-[#2F66F2] mx-auto mb-2" />
-            <p className="text-3xl font-bold text-[#1C1C1C]">{semanasConcluidas}</p>
+            <TrendingUp className="w-6 h-6 text-[#0A66C2] mx-auto mb-2" />
+            <p className="text-3xl font-bold text-[#2B2F36]">{semanasConcluidas}</p>
             <p className="text-xs text-gray-600 mt-1">Semanas</p>
           </div>
           <div className="bg-white rounded-xl p-5 text-center shadow-lg">
-            <Target className="w-6 h-6 text-[#2F66F2] mx-auto mb-2" />
-            <p className="text-3xl font-bold text-[#1C1C1C]">{nivelDor}</p>
+            <Target className="w-6 h-6 text-[#0A66C2] mx-auto mb-2" />
+            <p className="text-3xl font-bold text-[#2B2F36]">{nivelDor}</p>
             <p className="text-xs text-gray-600 mt-1">Nível de dor</p>
           </div>
         </div>
@@ -101,22 +101,22 @@ export default function ProgressoPage() {
         {progresso.trilhaAtual && (
           <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
             <div className="flex items-center gap-3 mb-4">
-              <Award className="w-6 h-6 text-[#2F66F2]" />
-              <h2 className="text-xl font-bold text-[#1C1C1C]">Trilha Atual</h2>
+              <Award className="w-6 h-6 text-[#0A66C2]" />
+              <h2 className="text-xl font-bold text-[#2B2F36]">Trilha Atual</h2>
             </div>
-            <div className="bg-[#70CFFF]/10 rounded-xl p-4">
-              <h3 className="font-bold text-[#1C1C1C] mb-2">
+            <div className="bg-[#36C2FF]/10 rounded-xl p-4">
+              <h3 className="font-bold text-[#2B2F36] mb-2">
                 {getNomeTrilha(progresso.trilhaAtual)}
               </h3>
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm text-gray-600">Progresso</span>
-                <span className="text-sm font-semibold text-[#2F66F2]">
+                <span className="text-sm font-semibold text-[#0A66C2]">
                   Dia {progresso.diasTreinados}
                 </span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
                 <div 
-                  className="bg-[#2F66F2] h-2 rounded-full transition-all duration-500"
+                  className="bg-[#0A66C2] h-2 rounded-full transition-all duration-500"
                   style={{ width: `${(progresso.diasTreinados / 30) * 100}%` }}
                 />
               </div>
@@ -129,23 +129,23 @@ export default function ProgressoPage() {
           <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
             <div className="flex items-center gap-3 mb-4">
               <CheckCircle2 className="w-6 h-6 text-green-600" />
-              <h2 className="text-xl font-bold text-[#1C1C1C]">Trilhas em Andamento</h2>
+              <h2 className="text-xl font-bold text-[#2B2F36]">Trilhas em Andamento</h2>
             </div>
             <div className="space-y-4">
               {trilhasConcluidas.map((trilha, index) => (
-                <div key={index} className="border-l-4 border-[#2F66F2] pl-4">
-                  <h3 className="font-semibold text-[#1C1C1C] mb-2">{trilha.nome}</h3>
+                <div key={index} className="border-l-4 border-[#0A66C2] pl-4">
+                  <h3 className="font-semibold text-[#2B2F36] mb-2">{trilha.nome}</h3>
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm text-gray-600">
                       {trilha.dias} de {trilha.total} dias
                     </span>
-                    <span className="text-sm font-semibold text-[#2F66F2]">
+                    <span className="text-sm font-semibold text-[#0A66C2]">
                       {Math.round((trilha.dias / trilha.total) * 100)}%
                     </span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
                     <div 
-                      className="bg-[#2F66F2] h-2 rounded-full transition-all duration-500"
+                      className="bg-[#0A66C2] h-2 rounded-full transition-all duration-500"
                       style={{ width: `${(trilha.dias / trilha.total) * 100}%` }}
                     />
                   </div>
@@ -156,7 +156,7 @@ export default function ProgressoPage() {
         )}
 
         {/* Recomendações */}
-        <div className="bg-gradient-to-br from-[#2F66F2] to-[#1a4db8] rounded-2xl shadow-lg p-6 mb-8 text-white">
+        <div className="bg-gradient-to-br from-[#0A66C2] to-[#186FEC] rounded-2xl shadow-lg p-6 mb-8 text-white">
           <div className="flex items-center gap-3 mb-4">
             <Trophy className="w-6 h-6" />
             <h2 className="text-xl font-bold">Recomendação</h2>
@@ -177,7 +177,7 @@ export default function ProgressoPage() {
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
           <div className="flex items-center gap-3 mb-4">
             <Award className="w-6 h-6 text-yellow-500" />
-            <h2 className="text-xl font-bold text-[#1C1C1C]">Conquistas</h2>
+            <h2 className="text-xl font-bold text-[#2B2F36]">Conquistas</h2>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <ConquistaCard
@@ -206,7 +206,7 @@ export default function ProgressoPage() {
         {/* CTA */}
         <button
           onClick={() => router.push('/')}
-          className="w-full bg-[#2F66F2] hover:bg-[#2557d6] text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300"
+          className="w-full bg-[#0A66C2] hover:bg-[#186FEC] text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300"
         >
           Voltar ao início
         </button>

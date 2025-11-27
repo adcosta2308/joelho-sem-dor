@@ -50,14 +50,14 @@ export default function PlanoCrisePage() {
             numero={1}
             titulo="Pare e descanse"
             descricao="Interrompa qualquer atividade que esteja causando dor. Deite-se ou sente-se confortavelmente e mantenha o joelho em repouso por 15-30 minutos."
-            cor="bg-blue-500"
+            cor="bg-[#0A66C2]"
           />
 
           <InstrucaoCard
             numero={2}
             titulo="Aplique gelo"
             descricao="Coloque uma bolsa de gelo (ou saco de gelo envolto em toalha) sobre o joelho por 15-20 minutos. Repita a cada 2-3 horas se necessário. Nunca aplique gelo diretamente na pele."
-            cor="bg-cyan-500"
+            cor="bg-[#36C2FF]"
           />
 
           <InstrucaoCard
@@ -70,7 +70,7 @@ export default function PlanoCrisePage() {
 
         {/* O que evitar */}
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
-          <h2 className="text-xl font-bold text-[#1C1C1C] mb-4 flex items-center gap-2">
+          <h2 className="text-xl font-bold text-[#2B2F36] mb-4 flex items-center gap-2">
             <AlertTriangle className="w-5 h-5 text-orange-500" />
             O que NÃO fazer
           </h2>
@@ -112,8 +112,8 @@ export default function PlanoCrisePage() {
         {/* Contato de Emergência */}
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
           <div className="flex items-center gap-3 mb-4">
-            <Phone className="w-6 h-6 text-[#2F66F2]" />
-            <h3 className="font-bold text-[#1C1C1C]">Precisa de ajuda?</h3>
+            <Phone className="w-6 h-6 text-[#0A66C2]" />
+            <h3 className="font-bold text-[#2B2F36]">Precisa de ajuda?</h3>
           </div>
           <p className="text-sm text-gray-600 mb-4">
             Se a dor não melhorar em 48 horas ou piorar, consulte um fisioterapeuta ou médico ortopedista.
@@ -129,7 +129,7 @@ export default function PlanoCrisePage() {
         {/* Botão de retorno */}
         <button
           onClick={() => router.back()}
-          className="w-full bg-[#2F66F2] hover:bg-[#2557d6] text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300"
+          className="w-full bg-[#0A66C2] hover:bg-[#186FEC] text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300"
         >
           Retornar ao treino
         </button>
@@ -156,7 +156,7 @@ function InstrucaoCard({
           {numero}
         </div>
         <div className="flex-1">
-          <h3 className="font-bold text-[#1C1C1C] mb-2 text-lg">
+          <h3 className="font-bold text-[#2B2F36] mb-2 text-lg">
             {titulo}
           </h3>
           <p className="text-gray-600 text-sm leading-relaxed">

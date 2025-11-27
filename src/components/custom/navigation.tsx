@@ -28,13 +28,13 @@ export default function Navigation() {
               href={link.href}
               className={`flex flex-col items-center justify-center gap-1 transition-all duration-300 ${
                 isActive 
-                  ? 'text-[#2F66F2]' 
-                  : 'text-gray-500 hover:text-[#2F66F2]'
+                  ? 'text-[#0A66C2]' 
+                  : 'text-gray-500 hover:text-[#0A66C2]'
               }`}
             >
               <div className={`p-2 rounded-full transition-all duration-300 ${
                 isActive 
-                  ? 'bg-[#70CFFF]/20' 
+                  ? 'bg-[#36C2FF]/20' 
                   : 'hover:bg-gray-100'
               }`}>
                 <Icon className="w-5 h-5" strokeWidth={2.5} />

@@ -86,11 +86,18 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#70CFFF]/10 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-[#36C2FF]/10 to-white">
       {/* Header */}
-      <header className="bg-[#2F66F2] text-white pt-12 pb-8 px-6">
+      <header className="bg-gradient-to-br from-[#0A66C2] to-[#186FEC] text-white pt-12 pb-8 px-6">
         <div className="max-w-md mx-auto">
-          <h1 className="text-3xl font-bold">Joelho Sem Dor</h1>
+          <div className="flex items-center gap-3 mb-3">
+            <img 
+              src="https://k6hrqrxuu8obbfwn.public.blob.vercel-storage.com/temp/f090dccd-192c-4ce3-8da1-1e81b091548c.png" 
+              alt="Orthoxis Logo" 
+              className="h-8 w-auto"
+            />
+          </div>
+          <h1 className="text-3xl font-bold">Orthoxis</h1>
         </div>
       </header>
 
@@ -99,11 +106,11 @@ export default function OnboardingPage() {
         {etapa === 'boas-vindas' && (
           <div className="bg-white rounded-2xl shadow-lg p-8">
             <div className="text-center mb-8">
-              <div className="w-20 h-20 bg-[#70CFFF]/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                <CheckCircle2 className="w-10 h-10 text-[#2F66F2]" />
+              <div className="w-20 h-20 bg-[#36C2FF]/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <CheckCircle2 className="w-10 h-10 text-[#0A66C2]" />
               </div>
-              <h2 className="text-2xl font-bold text-[#1C1C1C] mb-4">
-                Bem-vindo ao Joelho Sem Dor
+              <h2 className="text-2xl font-bold text-[#2B2F36] mb-4">
+                Bem-vindo à Orthoxis
               </h2>
               <p className="text-gray-600 leading-relaxed">
                 Vamos fazer algumas perguntas rápidas para entender sua dor e recomendar a trilha ideal para você.
@@ -112,7 +119,7 @@ export default function OnboardingPage() {
 
             <button
               onClick={avancar}
-              className="w-full bg-[#2F66F2] hover:bg-[#2557d6] text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-all duration-300"
+              className="w-full bg-[#0A66C2] hover:bg-[#186FEC] text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-all duration-300"
             >
               Começar avaliação
               <ArrowRight className="w-5 h-5" />
@@ -125,13 +132,13 @@ export default function OnboardingPage() {
           <div className="bg-white rounded-2xl shadow-lg p-8">
             <button
               onClick={() => setEtapa('boas-vindas')}
-              className="mb-6 text-[#2F66F2] flex items-center gap-2 hover:underline"
+              className="mb-6 text-[#0A66C2] flex items-center gap-2 hover:underline"
             >
               <ArrowLeft className="w-4 h-4" />
               Voltar
             </button>
 
-            <h2 className="text-2xl font-bold text-[#1C1C1C] mb-3">
+            <h2 className="text-2xl font-bold text-[#2B2F36] mb-3">
               Qual o nível da sua dor hoje?
             </h2>
             <p className="text-gray-600 mb-8">
@@ -141,7 +148,7 @@ export default function OnboardingPage() {
             <div className="mb-8">
               <div className="flex justify-between mb-3">
                 <span className="text-sm text-gray-600">Sem dor</span>
-                <span className="text-2xl font-bold text-[#2F66F2]">{nivelDor}</span>
+                <span className="text-2xl font-bold text-[#0A66C2]">{nivelDor}</span>
                 <span className="text-sm text-gray-600">Dor máxima</span>
               </div>
               <input
@@ -150,7 +157,7 @@ export default function OnboardingPage() {
                 max="10"
                 value={nivelDor}
                 onChange={(e) => setNivelDor(parseInt(e.target.value))}
-                className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#2F66F2]"
+                className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#0A66C2]"
               />
               <div className="flex justify-between mt-2 text-xs text-gray-500">
                 {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => (
@@ -161,7 +168,7 @@ export default function OnboardingPage() {
 
             <button
               onClick={avancar}
-              className="w-full bg-[#2F66F2] hover:bg-[#2557d6] text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-all duration-300"
+              className="w-full bg-[#0A66C2] hover:bg-[#186FEC] text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-all duration-300"
             >
               Continuar
               <ArrowRight className="w-5 h-5" />
@@ -174,13 +181,13 @@ export default function OnboardingPage() {
           <div className="bg-white rounded-2xl shadow-lg p-8">
             <button
               onClick={() => setEtapa('dor')}
-              className="mb-6 text-[#2F66F2] flex items-center gap-2 hover:underline"
+              className="mb-6 text-[#0A66C2] flex items-center gap-2 hover:underline"
             >
               <ArrowLeft className="w-4 h-4" />
               Voltar
             </button>
 
-            <h2 className="text-2xl font-bold text-[#1C1C1C] mb-3">
+            <h2 className="text-2xl font-bold text-[#2B2F36] mb-3">
               Quais atividades causam dor?
             </h2>
             <p className="text-gray-600 mb-6">
@@ -194,14 +201,14 @@ export default function OnboardingPage() {
                   onClick={() => toggleDificuldade(opcao.id)}
                   className={`w-full p-4 rounded-xl border-2 transition-all duration-300 text-left ${
                     dificuldades.includes(opcao.id)
-                      ? 'border-[#2F66F2] bg-[#70CFFF]/10'
+                      ? 'border-[#0A66C2] bg-[#36C2FF]/10'
                       : 'border-gray-200 hover:border-gray-300'
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-medium text-[#1C1C1C]">{opcao.label}</span>
+                    <span className="font-medium text-[#2B2F36]">{opcao.label}</span>
                     {dificuldades.includes(opcao.id) && (
-                      <CheckCircle2 className="w-5 h-5 text-[#2F66F2]" />
+                      <CheckCircle2 className="w-5 h-5 text-[#0A66C2]" />
                     )}
                   </div>
                 </button>
@@ -211,7 +218,7 @@ export default function OnboardingPage() {
             <button
               onClick={avancar}
               disabled={dificuldades.length === 0}
-              className="w-full bg-[#2F66F2] hover:bg-[#2557d6] text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-[#0A66C2] hover:bg-[#186FEC] text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Ver recomendação
               <ArrowRight className="w-5 h-5" />
@@ -226,11 +233,11 @@ export default function OnboardingPage() {
               <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <CheckCircle2 className="w-10 h-10 text-green-600" />
               </div>
-              <h2 className="text-2xl font-bold text-[#1C1C1C] mb-4">
+              <h2 className="text-2xl font-bold text-[#2B2F36] mb-4">
                 Trilha recomendada para você
               </h2>
-              <div className="bg-[#70CFFF]/10 rounded-xl p-6 mb-6">
-                <h3 className="text-xl font-bold text-[#2F66F2] mb-2">
+              <div className="bg-[#36C2FF]/10 rounded-xl p-6 mb-6">
+                <h3 className="text-xl font-bold text-[#0A66C2] mb-2">
                   {getNomeTrilha(trilhaRecomendada)}
                 </h3>
                 <p className="text-gray-600 text-sm">
@@ -242,14 +249,14 @@ export default function OnboardingPage() {
             <div className="space-y-3">
               <button
                 onClick={iniciarTrilha}
-                className="w-full bg-[#2F66F2] hover:bg-[#2557d6] text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-all duration-300"
+                className="w-full bg-[#0A66C2] hover:bg-[#186FEC] text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-all duration-300"
               >
                 Iniciar no Dia 1
                 <ArrowRight className="w-5 h-5" />
               </button>
               <button
                 onClick={() => router.push('/trilhas')}
-                className="w-full border-2 border-[#2F66F2] text-[#2F66F2] font-semibold py-4 px-6 rounded-xl hover:bg-[#70CFFF]/10 transition-all duration-300"
+                className="w-full border-2 border-[#0A66C2] text-[#0A66C2] font-semibold py-4 px-6 rounded-xl hover:bg-[#36C2FF]/10 transition-all duration-300"
               >
                 Ver todas as trilhas
               </button>

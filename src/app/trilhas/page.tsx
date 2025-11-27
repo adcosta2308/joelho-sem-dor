@@ -18,7 +18,7 @@ export default function TrilhasPage() {
       nivel: 'Iniciante',
       premium: false,
       icon: '🎯',
-      cor: 'from-[#2F66F2] to-[#70CFFF]',
+      cor: 'from-[#0A66C2] to-[#186FEC]',
       selo: 'Ideal para dor na frente do joelho',
       resultado: 'Resultado esperado: redução significativa da dor ao subir escadas e agachar em 3–4 semanas.',
       rota: '/trilhas/condromalacia',
@@ -94,9 +94,16 @@ export default function TrilhasPage() {
       <Navigation />
       
       {/* Header */}
-      <header className="bg-gradient-to-br from-[#2F66F2] to-[#70CFFF] text-white pt-12 pb-10 px-6">
+      <header className="bg-gradient-to-br from-[#0A66C2] to-[#186FEC] text-white pt-12 pb-10 px-6">
         <div className="max-w-md mx-auto">
-          <h1 className="text-3xl font-bold mb-3">Escolha a trilha ideal para sua dor no joelho</h1>
+          <div className="flex items-center gap-3 mb-4">
+            <img 
+              src="https://k6hrqrxuu8obbfwn.public.blob.vercel-storage.com/temp/f090dccd-192c-4ce3-8da1-1e81b091548c.png" 
+              alt="Orthoxis Logo" 
+              className="h-8 w-auto"
+            />
+          </div>
+          <h1 className="text-3xl font-bold mb-3">Escolha a trilha ideal para seu joelho</h1>
           <p className="text-white/90 text-base leading-relaxed">
             Programas de 21 a 30 dias com exercícios terapêuticos, progressão segura e resultados reais.
           </p>
@@ -127,7 +134,7 @@ export default function TrilhasPage() {
                     
                     <div className="flex-1">
                       <div className="flex items-start justify-between mb-2">
-                        <h3 className="text-xl font-bold text-[#1C1C1C]">{trilha.nome}</h3>
+                        <h3 className="text-xl font-bold text-[#2B2F36]">{trilha.nome}</h3>
                         {bloqueado && (
                           <Lock className="w-5 h-5 text-gray-400" />
                         )}
