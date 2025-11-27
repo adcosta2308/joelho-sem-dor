@@ -7,7 +7,9 @@ import { useAppStore } from '@/lib/store';
 
 export default function TrilhasPage() {
   const router = useRouter();
-  const isPremium = useAppStore((state) => state.isPremium);
+  const { isPremium, verificarAcessoTrilha, trilhaRecomendada, verificarTrial } = useAppStore();
+
+  const trialAtivo = verificarTrial();
 
   const trilhas = [
     {
@@ -37,7 +39,7 @@ export default function TrilhasPage() {
       rota: '/trilhas/dor-ao-agachar',
     },
     {
-      id: 'escada',
+      id: 'escadas',
       nome: 'Dor ao Subir e Descer Escadas',
       descricao: 'Melhore estabilidade e força para subir e descer escadas sem incômodo.',
       duracao: '21 dias',
@@ -50,7 +52,7 @@ export default function TrilhasPage() {
       rota: '/trilhas/dor-ao-subir-e-descer-escadas',
     },
     {
-      id: 'sobrepeso',
+      id: 'sobrepeso-joelho',
       nome: 'Sobrepeso + Joelho',
       descricao: 'Exercícios sem impacto para fortalecer e proteger suas articulações.',
       duracao: '21 dias',
@@ -76,7 +78,7 @@ export default function TrilhasPage() {
       rota: '/trilhas/volta-treinos',
     },
     {
-      id: 'corrida',
+      id: 'corrida-iniciante',
       nome: 'Corrida Iniciante',
       descricao: 'Prepare seu joelho para correr com técnica, mobilidade e força.',
       duracao: '30 dias',
@@ -88,6 +90,38 @@ export default function TrilhasPage() {
       resultado: 'Resultado esperado: joelho preparado para corrida em 4 semanas.',
     },
   ];
+
+  const handleTrilhaClick = (trilha: typeof trilhas[0]) => {
+    const temAcesso = verificarAcessoTrilha(trilha.id);
+    const ehRecomendada = trilha.id === trilhaRecomendada;
+
+    // Premium tem acesso a tudo
+    if (isPremium) {
+      if (trilha.rota) {
+        router.push(trilha.rota);
+      }
+      return;
+    }
+
+    // Trial ativo na trilha recomendada
+    if (trialAtivo && ehRecomendada) {
+      if (trilha.rota) {
+        router.push(trilha.rota);
+      }
+      return;
+    }
+
+    // Trilha comprada individualmente
+    if (temAcesso) {
+      if (trilha.rota) {
+        router.push(trilha.rota);
+      }
+      return;
+    }
+
+    // Bloqueado - redireciona para trial
+    router.push('/trial');
+  };
 
   return (
     <div className="min-h-screen bg-[#F2F4F7] pb-24">
@@ -113,31 +147,44 @@ export default function TrilhasPage() {
       <main className="max-w-md mx-auto px-6 -mt-4">
         <div className="space-y-4">
           {trilhas.map((trilha) => {
-            const bloqueado = trilha.premium && !isPremium;
+            const temAcesso = verificarAcessoTrilha(trilha.id);
+            const ehRecomendada = trilha.id === trilhaRecomendada;
+            const bloqueado = !isPremium && !temAcesso && !(trialAtivo && ehRecomendada);
             
             return (
               <div
                 key={trilha.id}
                 className={`bg-white rounded-2xl shadow-lg overflow-hidden ${
                   bloqueado ? 'opacity-75' : 'hover:shadow-xl'
-                } transition-all`}
+                } transition-all relative`}
               >
+                {/* Badge de trilha recomendada */}
+                {ehRecomendada && (
+                  <div className="absolute top-4 right-4 z-10">
+                    <span className="bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                      Recomendada
+                    </span>
+                  </div>
+                )}
+
                 <div className={`h-2 bg-gradient-to-r ${trilha.cor}`} />
                 
                 <div className="p-6">
                   <div className="flex items-start gap-4">
                     <div className="flex-shrink-0">
-                      <div className={`w-14 h-14 bg-gradient-to-br ${trilha.cor} rounded-xl flex items-center justify-center text-2xl`}>
+                      <div className={`w-14 h-14 bg-gradient-to-br ${trilha.cor} rounded-xl flex items-center justify-center text-2xl relative`}>
                         {trilha.icon}
+                        {bloqueado && (
+                          <div className="absolute inset-0 bg-black/40 rounded-xl flex items-center justify-center">
+                            <Lock className="w-6 h-6 text-white" />
+                          </div>
+                        )}
                       </div>
                     </div>
                     
                     <div className="flex-1">
                       <div className="flex items-start justify-between mb-2">
                         <h3 className="text-xl font-bold text-[#2B2F36]">{trilha.nome}</h3>
-                        {bloqueado && (
-                          <Lock className="w-5 h-5 text-gray-400" />
-                        )}
                       </div>
                       
                       {/* Selo */}
@@ -169,24 +216,18 @@ export default function TrilhasPage() {
                       
                       {bloqueado ? (
                         <button
-                          onClick={() => router.push('/premium')}
+                          onClick={() => handleTrilhaClick(trilha)}
                           className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-semibold py-3 px-6 rounded-xl transition-all flex items-center justify-center gap-2"
                         >
                           <Lock className="w-4 h-4" />
-                          Desbloquear com Premium
+                          Desbloquear trilha
                         </button>
                       ) : (
                         <button
-                          onClick={() => {
-                            if (trilha.rota) {
-                              router.push(trilha.rota);
-                            } else {
-                              router.push('/plano');
-                            }
-                          }}
+                          onClick={() => handleTrilhaClick(trilha)}
                           className={`w-full bg-gradient-to-r ${trilha.cor} hover:opacity-90 text-white font-semibold py-3 px-6 rounded-xl transition-all`}
                         >
-                          Iniciar trilha
+                          {ehRecomendada && trialAtivo ? 'Continuar trilha' : 'Iniciar trilha'}
                         </button>
                       )}
                     </div>
@@ -205,10 +246,10 @@ export default function TrilhasPage() {
               Acesse programas exclusivos e acelere seus resultados
             </p>
             <button
-              onClick={() => router.push('/premium')}
+              onClick={() => router.push('/trial')}
               className="w-full bg-white text-orange-600 font-semibold py-3 px-6 rounded-xl hover:bg-white/90 transition-colors"
             >
-              Ver planos Premium
+              {trialAtivo ? 'Ver planos Premium' : 'Começar 7 dias grátis'}
             </button>
           </div>
         )}

@@ -7,15 +7,44 @@ import { useAppStore } from '@/lib/store';
 
 export default function TrilhaCondromalaciaPage() {
   const router = useRouter();
-  const progressoCondromalacia = useAppStore((state) => state.progressoCondromalacia);
+  const { progressoCondromalacia, isPremium, verificarAcessoDia, trilhasCompradas, verificarTrial, trilhaRecomendada } = useAppStore();
+
+  const trilhaId = 'condromalacia';
+  const ehRecomendada = trilhaId === trilhaRecomendada;
+  const trialAtivo = verificarTrial();
 
   const isDiaDesbloqueado = (dia: number) => {
+    // Premium tem acesso a tudo
+    if (isPremium) return true;
+    
+    // Trilha comprada individualmente
+    if (trilhasCompradas.includes(trilhaId)) return true;
+    
+    // Trial ativo na trilha recomendada
+    if (trialAtivo && ehRecomendada) {
+      // Dias 1-7 liberados no trial
+      if (dia >= 1 && dia <= 7) return true;
+      return false;
+    }
+    
+    // Lógica antiga de progressão (dia 1 sempre liberado)
     if (dia === 1) return true;
     return progressoCondromalacia[dia - 1] === true;
   };
 
   const isDiaConcluido = (dia: number) => {
     return progressoCondromalacia[dia] === true;
+  };
+
+  const handleDiaClick = (dia: number) => {
+    const desbloqueado = isDiaDesbloqueado(dia);
+    
+    if (desbloqueado) {
+      router.push(`/trilhas/condromalacia/dia/${dia}`);
+    } else {
+      // Redireciona para trial/paywall
+      router.push('/trial');
+    }
   };
 
   return (
@@ -62,6 +91,15 @@ export default function TrilhaCondromalaciaPage() {
               />
             </div>
           </div>
+
+          {/* Banner Trial Ativo */}
+          {trialAtivo && ehRecomendada && !isPremium && !trilhasCompradas.includes(trilhaId) && (
+            <div className="mt-4 bg-green-500/20 backdrop-blur-sm border border-green-300/30 rounded-xl p-3">
+              <p className="text-white text-sm font-medium">
+                🎉 Trial ativo: Dias 1-7 liberados
+              </p>
+            </div>
+          )}
         </div>
       </header>
 
@@ -95,18 +133,13 @@ export default function TrilhaCondromalaciaPage() {
                   return (
                     <button
                       key={dia}
-                      onClick={() => {
-                        if (desbloqueado) {
-                          router.push(`/trilhas/condromalacia/dia/${dia}`);
-                        }
-                      }}
-                      disabled={!desbloqueado}
+                      onClick={() => handleDiaClick(dia)}
                       className={`w-full flex items-center gap-4 p-4 rounded-xl transition-all ${
                         concluido
                           ? 'bg-green-50 border-2 border-green-200'
                           : desbloqueado
                           ? 'bg-blue-50 border-2 border-blue-200 hover:bg-blue-100'
-                          : 'bg-gray-50 border-2 border-gray-200 opacity-60 cursor-not-allowed'
+                          : 'bg-gray-50 border-2 border-gray-200 opacity-60 cursor-pointer'
                       }`}
                     >
                       <div
@@ -142,6 +175,30 @@ export default function TrilhaCondromalaciaPage() {
             </div>
           ))}
         </div>
+
+        {/* CTA Upgrade - Mostrar se não for Premium e não tiver comprado */}
+        {!isPremium && !trilhasCompradas.includes(trilhaId) && (
+          <div className="mt-8 bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl shadow-lg p-6 text-white">
+            <h3 className="text-xl font-bold mb-2">Desbloqueie a trilha completa</h3>
+            <p className="text-white/90 mb-4 text-sm">
+              Acesse todos os 30 dias e acelere sua recuperação
+            </p>
+            <div className="space-y-2">
+              <button
+                onClick={() => router.push('/trial')}
+                className="w-full bg-white text-orange-600 font-semibold py-3 px-6 rounded-xl hover:bg-white/90 transition-colors"
+              >
+                Desbloquear trilha completa
+              </button>
+              <button
+                onClick={() => router.push('/trial')}
+                className="w-full bg-white/20 backdrop-blur-sm text-white font-semibold py-3 px-6 rounded-xl hover:bg-white/30 transition-colors"
+              >
+                Tornar-se Premium e liberar tudo
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Dicas */}
         <div className="mt-8 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-2xl shadow-lg p-6 text-white">

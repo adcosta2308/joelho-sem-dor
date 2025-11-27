@@ -1,212 +1,198 @@
 'use client';
 
-import { useState } from 'react';
-import { User, Mail, Bell, LogOut, Crown, ChevronRight } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import Navigation from '@/components/custom/navigation';
-import { useAppStore } from '@/lib/store';
+import { getCurrentUser, getProfile, signOut } from '@/lib/auth-helpers';
+import type { Profile } from '@/lib/supabase';
+import { User, Mail, Calendar, Award, LogOut, Loader2, Crown } from 'lucide-react';
 
 export default function PerfilPage() {
   const router = useRouter();
-  const profile = useAppStore((state) => state.profile);
-  const setProfile = useAppStore((state) => state.setProfile);
-  const isPremium = useAppStore((state) => state.isPremium);
-  
-  const [nome, setNome] = useState(profile.nome || 'Usuário');
-  const [email, setEmail] = useState(profile.email || 'usuario@email.com');
-  const [lembretes, setLembretes] = useState(profile.lembretes);
-  const [notificacoes, setNotificacoes] = useState(profile.notificacoes);
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const handleSalvar = () => {
-    setProfile({ nome, email, lembretes, notificacoes });
-    alert('Perfil atualizado com sucesso!');
+  useEffect(() => {
+    loadProfile();
+  }, []);
+
+  const loadProfile = async () => {
+    try {
+      const user = await getCurrentUser();
+      if (!user) {
+        router.push('/login');
+        return;
+      }
+
+      const profileData = await getProfile(user.id);
+      if (profileData) {
+        setProfile(profileData);
+      }
+    } catch (error) {
+      console.error('Erro ao carregar perfil:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
+  const handleLogout = async () => {
+    await signOut();
+    router.push('/');
+    router.refresh();
+  };
+
+  const getPlanoBadge = (plano: string) => {
+    const badges = {
+      free: { label: 'Gratuito', color: 'bg-gray-100 text-gray-700' },
+      free_trial: { label: 'Trial Gratuito', color: 'bg-blue-100 text-blue-700' },
+      premium: { label: 'Premium', color: 'bg-gradient-to-r from-yellow-400 to-orange-500 text-white' },
+      trilha_individual: { label: 'Trilha Individual', color: 'bg-purple-100 text-purple-700' },
+    };
+    return badges[plano as keyof typeof badges] || badges.free;
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-[#36C2FF]/10 to-white flex items-center justify-center pb-24">
+        <Loader2 className="w-8 h-8 animate-spin text-[#0A66C2]" />
+      </div>
+    );
+  }
+
+  if (!profile) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-[#36C2FF]/10 to-white pb-24">
+        <Navigation />
+        <div className="max-w-md mx-auto px-6 pt-8">
+          <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
+            <User className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+            <h2 className="text-xl font-bold text-[#2B2F36] mb-2">Faça login para continuar</h2>
+            <p className="text-gray-600 mb-6">Acesse sua conta para ver seu perfil e progresso</p>
+            <Link
+              href="/login"
+              className="inline-block w-full bg-[#0A66C2] hover:bg-[#186FEC] text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300"
+            >
+              Fazer login
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const planoBadge = getPlanoBadge(profile.plano);
+
   return (
-    <div className="min-h-screen bg-[#F2F4F7] pb-24">
+    <div className="min-h-screen bg-gradient-to-b from-[#36C2FF]/10 to-white pb-24">
       <Navigation />
       
       {/* Header */}
-      <header className="bg-gradient-to-br from-[#2F66F2] to-[#70CFFF] text-white pt-12 pb-16 px-6">
-        <div className="max-w-md mx-auto text-center">
-          <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-            <User className="w-10 h-10" />
-          </div>
-          <h1 className="text-2xl font-bold mb-1">{nome}</h1>
-          <p className="text-white/80 text-sm">{email}</p>
-          {isPremium && (
-            <div className="inline-flex items-center gap-2 bg-amber-500 text-white px-4 py-2 rounded-full text-sm font-semibold mt-3">
-              <Crown className="w-4 h-4" />
-              Membro Premium
-            </div>
-          )}
+      <header className="bg-gradient-to-br from-[#0A66C2] to-[#186FEC] text-white pt-8 pb-12 px-6">
+        <div className="max-w-md mx-auto">
+          <h1 className="text-3xl font-bold mb-2">Meu Perfil</h1>
+          <p className="text-white/90">Gerencie suas informações</p>
         </div>
       </header>
 
-      <main className="max-w-md mx-auto px-6 -mt-8">
-        {/* Informações Pessoais */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
-          <h2 className="text-lg font-bold text-[#1C1C1C] mb-4">Informações Pessoais</h2>
-          
+      {/* Main Content */}
+      <main className="max-w-md mx-auto px-6 -mt-6">
+        {/* Card de Perfil */}
+        <div className="bg-white rounded-2xl shadow-lg p-6 mb-5">
+          {/* Avatar e Nome */}
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-20 h-20 bg-gradient-to-br from-[#0A66C2] to-[#36C2FF] rounded-full flex items-center justify-center text-white text-2xl font-bold">
+              {profile.nome.charAt(0).toUpperCase()}
+            </div>
+            <div className="flex-1">
+              <h2 className="text-xl font-bold text-[#2B2F36] mb-1">{profile.nome}</h2>
+              <div className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${planoBadge.color}`}>
+                {profile.plano === 'premium' && <Crown className="w-3 h-3" />}
+                {planoBadge.label}
+              </div>
+            </div>
+          </div>
+
+          {/* Informações */}
           <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Nome
-              </label>
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="text"
-                  value={nome}
-                  onChange={(e) => setNome(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2F66F2] focus:border-transparent"
-                  placeholder="Seu nome"
-                />
-              </div>
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                E-mail
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2F66F2] focus:border-transparent"
-                  placeholder="seu@email.com"
-                />
-              </div>
-            </div>
-          </div>
-          
-          <button
-            onClick={handleSalvar}
-            className="w-full mt-6 bg-[#2F66F2] hover:bg-[#2557d6] text-white font-semibold py-3 px-6 rounded-xl transition-colors"
-          >
-            Salvar alterações
-          </button>
-        </div>
-
-        {/* Dor Atual */}
-        <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
-          <h2 className="text-lg font-bold text-[#1C1C1C] mb-4">Dor Atual</h2>
-          
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-gray-600">Nível de dor hoje</span>
-            <span className="text-2xl font-bold text-[#2F66F2]">{profile.dorAtual}/10</span>
-          </div>
-          
-          <button
-            onClick={() => router.push('/progresso')}
-            className="w-full bg-[#F2F4F7] hover:bg-gray-200 text-gray-700 font-medium py-3 px-4 rounded-xl transition-colors flex items-center justify-between"
-          >
-            Atualizar registro de dor
-            <ChevronRight className="w-5 h-5" />
-          </button>
-        </div>
-
-        {/* Configurações */}
-        <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
-          <h2 className="text-lg font-bold text-[#1C1C1C] mb-4 flex items-center gap-2">
-            <Bell className="w-5 h-5" />
-            Notificações
-          </h2>
-          
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+              <Mail className="w-5 h-5 text-[#0A66C2]" />
               <div>
-                <p className="font-medium text-gray-700">Lembretes de treino</p>
-                <p className="text-sm text-gray-500">Receba lembretes diários</p>
+                <p className="text-xs text-gray-600">E-mail</p>
+                <p className="text-sm font-medium text-[#2B2F36]">{profile.email}</p>
               </div>
-              <button
-                onClick={() => setLembretes(!lembretes)}
-                className={`relative w-12 h-7 rounded-full transition-colors ${
-                  lembretes ? 'bg-[#2F66F2]' : 'bg-gray-300'
-                }`}
-              >
-                <span
-                  className={`absolute top-1 left-1 w-5 h-5 bg-white rounded-full transition-transform ${
-                    lembretes ? 'translate-x-5' : 'translate-x-0'
-                  }`}
-                />
-              </button>
             </div>
-            
-            <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+
+            <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+              <Calendar className="w-5 h-5 text-[#0A66C2]" />
               <div>
-                <p className="font-medium text-gray-700">Notificações push</p>
-                <p className="text-sm text-gray-500">Atualizações e novidades</p>
+                <p className="text-xs text-gray-600">Membro desde</p>
+                <p className="text-sm font-medium text-[#2B2F36]">
+                  {new Date(profile.data_criacao).toLocaleDateString('pt-BR', {
+                    day: '2-digit',
+                    month: 'long',
+                    year: 'numeric'
+                  })}
+                </p>
               </div>
-              <button
-                onClick={() => setNotificacoes(!notificacoes)}
-                className={`relative w-12 h-7 rounded-full transition-colors ${
-                  notificacoes ? 'bg-[#2F66F2]' : 'bg-gray-300'
-                }`}
-              >
-                <span
-                  className={`absolute top-1 left-1 w-5 h-5 bg-white rounded-full transition-transform ${
-                    notificacoes ? 'translate-x-5' : 'translate-x-0'
-                  }`}
-                />
-              </button>
             </div>
+
+            {profile.trilha_recomendada && (
+              <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+                <Award className="w-5 h-5 text-[#0A66C2]" />
+                <div>
+                  <p className="text-xs text-gray-600">Trilha recomendada</p>
+                  <p className="text-sm font-medium text-[#2B2F36]">{profile.trilha_recomendada}</p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Premium CTA */}
-        {!isPremium && (
-          <div className="bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl shadow-lg p-6 text-white mb-6">
-            <div className="flex items-center gap-3 mb-3">
-              <Crown className="w-8 h-8" />
-              <div>
-                <h3 className="text-lg font-bold">Upgrade para Premium</h3>
-                <p className="text-sm text-white/80">Desbloqueie todos os recursos</p>
-              </div>
-            </div>
-            <button
-              onClick={() => router.push('/premium')}
-              className="w-full bg-white text-orange-600 font-semibold py-3 px-6 rounded-xl hover:bg-white/90 transition-colors"
+        {/* Trial Info - Se aplicável */}
+        {profile.trial_ativo && profile.trial_ends_at && (
+          <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-2xl p-6 mb-5">
+            <h3 className="text-lg font-bold mb-2">🎉 Trial Premium Ativo</h3>
+            <p className="text-sm text-white/90 mb-3">
+              Aproveite todos os recursos premium até{' '}
+              {new Date(profile.trial_ends_at).toLocaleDateString('pt-BR')}
+            </p>
+            <Link
+              href="/planos"
+              className="inline-block bg-white text-purple-600 font-semibold py-2 px-4 rounded-lg text-sm hover:bg-gray-100 transition-colors"
             >
               Ver planos
-            </button>
+            </Link>
           </div>
         )}
 
         {/* Ações */}
-        <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
-          <button
-            onClick={() => router.push('/crise')}
-            className="w-full text-left py-3 px-4 hover:bg-gray-50 rounded-xl transition-colors flex items-center justify-between"
+        <div className="space-y-3">
+          <Link
+            href="/perfil/editar"
+            className="block w-full text-center bg-white border-2 border-[#0A66C2] text-[#0A66C2] font-semibold py-3 px-6 rounded-xl hover:bg-[#0A66C2] hover:text-white transition-all duration-300"
           >
-            <span className="text-gray-700">Plano de crise</span>
-            <ChevronRight className="w-5 h-5 text-gray-400" />
-          </button>
-          
+            Editar perfil
+          </Link>
+
+          {profile.plano === 'free' && (
+            <Link
+              href="/planos"
+              className="block w-full text-center bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-semibold py-3 px-6 rounded-xl hover:from-yellow-500 hover:to-orange-600 transition-all duration-300 flex items-center justify-center gap-2"
+            >
+              <Crown className="w-5 h-5" />
+              Upgrade para Premium
+            </Link>
+          )}
+
           <button
-            onClick={() => router.push('/aulas')}
-            className="w-full text-left py-3 px-4 hover:bg-gray-50 rounded-xl transition-colors flex items-center justify-between"
+            onClick={handleLogout}
+            className="w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300"
           >
-            <span className="text-gray-700">Central de ajuda</span>
-            <ChevronRight className="w-5 h-5 text-gray-400" />
-          </button>
-          
-          <button
-            className="w-full text-left py-3 px-4 hover:bg-gray-50 rounded-xl transition-colors flex items-center justify-between text-red-600"
-          >
-            <span className="flex items-center gap-2">
-              <LogOut className="w-5 h-5" />
-              Sair
-            </span>
+            <LogOut className="w-5 h-5" />
+            Sair da conta
           </button>
         </div>
-
-        {/* Versão */}
-        <p className="text-center text-xs text-gray-400 mb-6">
-          Joelho Sem Dor v1.0.0
-        </p>
       </main>
     </div>
   );
