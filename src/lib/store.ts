@@ -55,6 +55,12 @@ interface AppStore {
   progressoCorridaIniciante: Record<number, boolean>;
   marcarDiaConcluidoCorridaIniciante: (dia: number) => void;
   diasConcluidosCorridaIniciante: number[];
+  
+  // Aulas Rápidas
+  aulasConcluidasIds: string[];
+  ultimaAulaVisualizada: string | null;
+  concluirAula: (aulaId: string) => void;
+  marcarAulaVisualizada: (aulaId: string) => void;
 }
 
 export const useAppStore = create<AppStore>()(
@@ -177,6 +183,17 @@ export const useAppStore = create<AppStore>()(
         };
       }),
       diasConcluidosCorridaIniciante: [],
+      
+      // Aulas Rápidas
+      aulasConcluidasIds: [],
+      ultimaAulaVisualizada: null,
+      concluirAula: (aulaId) => set((state) => ({
+        aulasConcluidasIds: state.aulasConcluidasIds.includes(aulaId) 
+          ? state.aulasConcluidasIds 
+          : [...state.aulasConcluidasIds, aulaId],
+        ultimaAulaVisualizada: aulaId,
+      })),
+      marcarAulaVisualizada: (aulaId) => set({ ultimaAulaVisualizada: aulaId }),
     }),
     {
       name: 'joelho-sem-dor-storage',
