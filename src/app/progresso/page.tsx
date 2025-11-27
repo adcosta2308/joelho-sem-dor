@@ -1,162 +1,238 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { TrendingUp, Calendar, Target, ArrowRight } from 'lucide-react';
-import Navigation from '@/components/custom/navigation';
+import { ArrowLeft, Trophy, Calendar, TrendingUp, CheckCircle2, Target, Award } from 'lucide-react';
 import { useAppStore } from '@/lib/store';
+import Navigation from '@/components/custom/navigation';
 
 export default function ProgressoPage() {
   const router = useRouter();
-  const progresso = useAppStore((state) => state.progresso);
-  const setProgresso = useAppStore((state) => state.setProgresso);
-  const [dorDoDia, setDorDoDia] = useState(progresso.dorDoDia);
+  const { progresso, profile, diasConcluidosCondromalacia, diasConcluidosSobrepesoJoelho, diasConcluidosVoltaTreinos, diasConcluidosCorridaIniciante } = useAppStore();
 
-  const handleSalvarDor = () => {
-    setProgresso({ dorDoDia });
+  const getTotalDiasConcluidos = () => {
+    return (
+      diasConcluidosCondromalacia.length +
+      diasConcluidosSobrepesoJoelho.length +
+      diasConcluidosVoltaTreinos.length +
+      diasConcluidosCorridaIniciante.length
+    );
+  };
+
+  const totalDias = getTotalDiasConcluidos();
+  const semanasConcluidas = Math.floor(totalDias / 7);
+  const nivelDor = profile.dorAtual;
+
+  const getNomeTrilha = (id: string) => {
+    const nomes: Record<string, string> = {
+      'condromalacia': 'Condromalácia',
+      'agachar': 'Dor ao Agachar',
+      'escadas': 'Dor ao Subir e Descer Escadas',
+      'sobrepeso-joelho': 'Sobrepeso + Joelho',
+      'volta-treinos': 'Volta aos Treinos',
+      'corrida-iniciante': 'Corrida Iniciante',
+    };
+    return nomes[id] || 'Condromalácia';
+  };
+
+  const trilhasConcluidas = [
+    { nome: 'Condromalácia', dias: diasConcluidosCondromalacia.length, total: 30 },
+    { nome: 'Sobrepeso + Joelho', dias: diasConcluidosSobrepesoJoelho.length, total: 21 },
+    { nome: 'Volta aos Treinos', dias: diasConcluidosVoltaTreinos.length, total: 28 },
+    { nome: 'Corrida Iniciante', dias: diasConcluidosCorridaIniciante.length, total: 30 },
+  ].filter(t => t.dias > 0);
+
+  const getRecomendacao = () => {
+    if (totalDias < 7) {
+      return 'Continue firme! Os primeiros dias são os mais importantes para criar o hábito.';
+    } else if (totalDias < 21) {
+      return 'Você está no caminho certo! Mantenha a consistência para ver resultados duradouros.';
+    } else if (totalDias < 30) {
+      return 'Excelente progresso! Você está construindo uma base sólida para um joelho saudável.';
+    } else {
+      return 'Parabéns! Você completou uma trilha inteira. Continue cuidando do seu joelho!';
+    }
   };
 
   return (
-    <div className="min-h-screen bg-[#F2F4F7] pb-24">
+    <div className="min-h-screen bg-gradient-to-b from-[#70CFFF]/10 to-white pb-24">
       <Navigation />
       
       {/* Header */}
-      <header className="bg-gradient-to-br from-[#2F66F2] to-[#70CFFF] text-white pt-12 pb-8 px-6">
+      <header className="bg-[#2F66F2] text-white pt-12 pb-16 px-6">
         <div className="max-w-md mx-auto">
-          <h1 className="text-3xl font-bold mb-2">Seu Progresso</h1>
-          <p className="text-white/80">Cada treino conta. Continue assim!</p>
+          <button
+            onClick={() => router.push('/')}
+            className="mb-4 flex items-center gap-2 text-white/90 hover:text-white"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Voltar
+          </button>
+          <div className="flex items-center gap-3 mb-3">
+            <Trophy className="w-8 h-8" />
+            <h1 className="text-3xl font-bold">Seu Progresso</h1>
+          </div>
+          <p className="text-[#70CFFF]">
+            Acompanhe sua evolução
+          </p>
         </div>
       </header>
 
-      <main className="max-w-md mx-auto px-6 -mt-4">
-        {/* Dor do Dia */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
-          <h2 className="text-xl font-bold text-[#1C1C1C] mb-4">Como está sua dor hoje?</h2>
-          
-          <div className="mb-6">
-            <div className="flex justify-between text-sm text-gray-600 mb-2">
-              <span>Sem dor</span>
-              <span className="text-3xl font-bold text-[#2F66F2]">{dorDoDia}</span>
-              <span>Dor máxima</span>
-            </div>
-            <input
-              type="range"
-              min="0"
-              max="10"
-              value={dorDoDia}
-              onChange={(e) => setDorDoDia(Number(e.target.value))}
-              className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#2F66F2]"
-            />
-            <div className="flex justify-between text-xs text-gray-400 mt-1">
-              {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-                <span key={num}>{num}</span>
-              ))}
-            </div>
+      <main className="max-w-md mx-auto px-6 -mt-8">
+        {/* Stats Principais */}
+        <div className="grid grid-cols-3 gap-3 mb-8">
+          <div className="bg-white rounded-xl p-5 text-center shadow-lg">
+            <Calendar className="w-6 h-6 text-[#2F66F2] mx-auto mb-2" />
+            <p className="text-3xl font-bold text-[#1C1C1C]">{totalDias}</p>
+            <p className="text-xs text-gray-600 mt-1">Dias concluídos</p>
           </div>
-
-          <button
-            onClick={handleSalvarDor}
-            className="w-full bg-[#2F66F2] hover:bg-[#2557d6] text-white font-semibold py-3 px-6 rounded-xl transition-colors"
-          >
-            Salvar registro
-          </button>
-        </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          <div className="bg-white rounded-xl shadow-sm p-5">
-            <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 bg-[#2F66F2]/10 rounded-full flex items-center justify-center">
-                <Calendar className="w-5 h-5 text-[#2F66F2]" />
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-[#1C1C1C]">{progresso.diasTreinados}</div>
-                <div className="text-xs text-gray-600">Dias treinados</div>
-              </div>
-            </div>
+          <div className="bg-white rounded-xl p-5 text-center shadow-lg">
+            <TrendingUp className="w-6 h-6 text-[#2F66F2] mx-auto mb-2" />
+            <p className="text-3xl font-bold text-[#1C1C1C]">{semanasConcluidas}</p>
+            <p className="text-xs text-gray-600 mt-1">Semanas</p>
           </div>
-
-          <div className="bg-white rounded-xl shadow-sm p-5">
-            <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 bg-[#70CFFF]/20 rounded-full flex items-center justify-center">
-                <Target className="w-5 h-5 text-[#2F66F2]" />
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-[#1C1C1C]">{progresso.semana}</div>
-                <div className="text-xs text-gray-600">Semana atual</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Gráfico de Evolução */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
-          <h3 className="text-lg font-bold text-[#1C1C1C] mb-4 flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-[#2F66F2]" />
-            Evolução da Dor
-          </h3>
-          
-          <div className="h-48 flex items-end justify-between gap-2 mb-4">
-            {[7, 6, 6, 5, 4, 4, 3].map((valor, index) => (
-              <div key={index} className="flex-1 flex flex-col items-center gap-2">
-                <div className="w-full bg-[#2F66F2]/20 rounded-t-lg relative" style={{ height: `${(valor / 10) * 100}%` }}>
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#2F66F2] to-[#70CFFF] rounded-t-lg" />
-                </div>
-                <span className="text-xs text-gray-500">D{index + 1}</span>
-              </div>
-            ))}
-          </div>
-
-          <div className="bg-[#70CFFF]/10 rounded-xl p-4">
-            <p className="text-sm text-gray-700">
-              <strong className="text-[#2F66F2]">Ótimo progresso!</strong> Sua dor reduziu 57% desde o início.
-            </p>
+          <div className="bg-white rounded-xl p-5 text-center shadow-lg">
+            <Target className="w-6 h-6 text-[#2F66F2] mx-auto mb-2" />
+            <p className="text-3xl font-bold text-[#1C1C1C]">{nivelDor}</p>
+            <p className="text-xs text-gray-600 mt-1">Nível de dor</p>
           </div>
         </div>
 
         {/* Trilha Atual */}
-        <div className="bg-gradient-to-br from-[#2F66F2] to-[#70CFFF] rounded-2xl shadow-lg p-6 text-white mb-6">
-          <h3 className="text-lg font-bold mb-2">Trilha Atual</h3>
-          <p className="text-xl font-semibold mb-4">{progresso.trilhaAtual}</p>
-          
-          <div className="bg-white/20 rounded-full h-2 mb-2">
-            <div className="bg-white rounded-full h-2" style={{ width: '43%' }} />
+        {progresso.trilhaAtual && (
+          <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
+            <div className="flex items-center gap-3 mb-4">
+              <Award className="w-6 h-6 text-[#2F66F2]" />
+              <h2 className="text-xl font-bold text-[#1C1C1C]">Trilha Atual</h2>
+            </div>
+            <div className="bg-[#70CFFF]/10 rounded-xl p-4">
+              <h3 className="font-bold text-[#1C1C1C] mb-2">
+                {getNomeTrilha(progresso.trilhaAtual)}
+              </h3>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-gray-600">Progresso</span>
+                <span className="text-sm font-semibold text-[#2F66F2]">
+                  Dia {progresso.diasTreinados}
+                </span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div 
+                  className="bg-[#2F66F2] h-2 rounded-full transition-all duration-500"
+                  style={{ width: `${(progresso.diasTreinados / 30) * 100}%` }}
+                />
+              </div>
+            </div>
           </div>
-          <p className="text-sm text-white/80">43% concluído • 17 dias restantes</p>
-          
-          <button
-            onClick={() => router.push('/trilhas')}
-            className="mt-4 w-full bg-white text-[#2F66F2] font-semibold py-3 px-6 rounded-xl flex items-center justify-center gap-2 hover:bg-white/90 transition-colors"
-          >
-            Continuar trilha
-            <ArrowRight className="w-4 h-4" />
-          </button>
+        )}
+
+        {/* Trilhas Concluídas */}
+        {trilhasConcluidas.length > 0 && (
+          <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
+            <div className="flex items-center gap-3 mb-4">
+              <CheckCircle2 className="w-6 h-6 text-green-600" />
+              <h2 className="text-xl font-bold text-[#1C1C1C]">Trilhas em Andamento</h2>
+            </div>
+            <div className="space-y-4">
+              {trilhasConcluidas.map((trilha, index) => (
+                <div key={index} className="border-l-4 border-[#2F66F2] pl-4">
+                  <h3 className="font-semibold text-[#1C1C1C] mb-2">{trilha.nome}</h3>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm text-gray-600">
+                      {trilha.dias} de {trilha.total} dias
+                    </span>
+                    <span className="text-sm font-semibold text-[#2F66F2]">
+                      {Math.round((trilha.dias / trilha.total) * 100)}%
+                    </span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div 
+                      className="bg-[#2F66F2] h-2 rounded-full transition-all duration-500"
+                      style={{ width: `${(trilha.dias / trilha.total) * 100}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Recomendações */}
+        <div className="bg-gradient-to-br from-[#2F66F2] to-[#1a4db8] rounded-2xl shadow-lg p-6 mb-8 text-white">
+          <div className="flex items-center gap-3 mb-4">
+            <Trophy className="w-6 h-6" />
+            <h2 className="text-xl font-bold">Recomendação</h2>
+          </div>
+          <p className="text-white/90 leading-relaxed mb-4">
+            {getRecomendacao()}
+          </p>
+          {totalDias >= 7 && (
+            <div className="bg-white/10 rounded-xl p-4">
+              <p className="text-sm text-white/80">
+                💡 <strong>Dica:</strong> Mantenha a regularidade. Treinar 3-4 vezes por semana é mais eficaz que treinar todos os dias e depois parar.
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Conquistas */}
-        <div className="bg-white rounded-2xl shadow-sm p-6">
-          <h3 className="text-lg font-bold text-[#1C1C1C] mb-4">Conquistas</h3>
-          <div className="grid grid-cols-4 gap-3">
-            {[
-              { emoji: '🎯', nome: 'Primeiro treino', ativo: true },
-              { emoji: '🔥', nome: '3 dias seguidos', ativo: true },
-              { emoji: '💪', nome: '7 dias', ativo: false },
-              { emoji: '⭐', nome: '30 dias', ativo: false },
-            ].map((conquista, index) => (
-              <div key={index} className="text-center">
-                <div className={`w-14 h-14 rounded-full flex items-center justify-center text-2xl mb-2 ${
-                  conquista.ativo ? 'bg-[#2F66F2]/10' : 'bg-gray-100'
-                }`}>
-                  {conquista.emoji}
-                </div>
-                <p className={`text-xs ${conquista.ativo ? 'text-gray-700' : 'text-gray-400'}`}>
-                  {conquista.nome}
-                </p>
-              </div>
-            ))}
+        <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
+          <div className="flex items-center gap-3 mb-4">
+            <Award className="w-6 h-6 text-yellow-500" />
+            <h2 className="text-xl font-bold text-[#1C1C1C]">Conquistas</h2>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <ConquistaCard
+              titulo="Primeira Semana"
+              descricao="Complete 7 dias"
+              conquistada={totalDias >= 7}
+            />
+            <ConquistaCard
+              titulo="Consistente"
+              descricao="Complete 14 dias"
+              conquistada={totalDias >= 14}
+            />
+            <ConquistaCard
+              titulo="Determinado"
+              descricao="Complete 21 dias"
+              conquistada={totalDias >= 21}
+            />
+            <ConquistaCard
+              titulo="Campeão"
+              descricao="Complete 30 dias"
+              conquistada={totalDias >= 30}
+            />
           </div>
         </div>
+
+        {/* CTA */}
+        <button
+          onClick={() => router.push('/')}
+          className="w-full bg-[#2F66F2] hover:bg-[#2557d6] text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300"
+        >
+          Voltar ao início
+        </button>
       </main>
+    </div>
+  );
+}
+
+function ConquistaCard({ titulo, descricao, conquistada }: { titulo: string; descricao: string; conquistada: boolean }) {
+  return (
+    <div className={`rounded-xl p-4 border-2 transition-all duration-300 ${
+      conquistada 
+        ? 'bg-yellow-50 border-yellow-400' 
+        : 'bg-gray-50 border-gray-200 opacity-50'
+    }`}>
+      <div className="text-center">
+        <div className={`text-3xl mb-2 ${conquistada ? '' : 'grayscale'}`}>
+          {conquistada ? '🏆' : '🔒'}
+        </div>
+        <h3 className={`font-bold text-sm mb-1 ${conquistada ? 'text-yellow-900' : 'text-gray-600'}`}>
+          {titulo}
+        </h3>
+        <p className={`text-xs ${conquistada ? 'text-yellow-700' : 'text-gray-500'}`}>
+          {descricao}
+        </p>
+      </div>
     </div>
   );
 }

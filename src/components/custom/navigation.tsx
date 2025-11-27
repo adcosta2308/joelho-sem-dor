@@ -9,7 +9,7 @@ export default function Navigation() {
   
   const links = [
     { href: '/', icon: Home, label: 'Início' },
-    { href: '/treino', icon: Dumbbell, label: 'Treino' },
+    { href: '/trilhas', icon: Dumbbell, label: 'Trilhas' },
     { href: '/aulas', icon: BookOpen, label: 'Aulas' },
     { href: '/progresso', icon: TrendingUp, label: 'Progresso' },
     { href: '/perfil', icon: User, label: 'Perfil' },
@@ -20,7 +20,7 @@ export default function Navigation() {
       <div className="max-w-md mx-auto flex justify-around items-center h-16 px-4">
         {links.map((link) => {
           const Icon = link.icon;
-          const isActive = pathname === link.href;
+          const isActive = pathname === link.href || pathname.startsWith(link.href + '/');
           
           return (
             <Link

@@ -1,210 +1,171 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { ArrowLeft, Lock, CheckCircle2, Clock, TrendingUp } from 'lucide-react';
-import Link from 'next/link';
-import Navigation from '@/components/custom/navigation';
+import { useState } from "react";
+import Link from "next/link";
+import { ArrowLeft, Lock, CheckCircle2, Circle, Play } from "lucide-react";
+import { dadosCondromalaciаFase1e2 } from "./dados";
+import { dadosCondromalaciаFase3e4 } from "./dados-fase3-4";
 
-// Dados dos 30 dias da trilha
-const diasTrilha = [
-  // FASE 1 - Dias 1 a 7
-  { dia: 1, fase: 1, titulo: 'Mobilidade e Ativação Inicial', tempoTotal: 12, exercicios: 3 },
-  { dia: 2, fase: 1, titulo: 'Glúteos e Proteção da Patela', tempoTotal: 10, exercicios: 3 },
-  { dia: 3, fase: 1, titulo: 'Alinhamento e Controle', tempoTotal: 10, exercicios: 3 },
-  { dia: 4, fase: 1, titulo: 'Estabilidade do Quadril', tempoTotal: 10, exercicios: 3 },
-  { dia: 5, fase: 1, titulo: 'Progressão Funcional', tempoTotal: 10, exercicios: 3 },
-  { dia: 6, fase: 1, titulo: 'Força e Resistência', tempoTotal: 10, exercicios: 3 },
-  { dia: 7, fase: 1, titulo: 'Integração da Semana 1', tempoTotal: 10, exercicios: 3 },
-  
-  // FASE 2 - Dias 8 a 14
-  { dia: 8, fase: 2, titulo: 'Fortalecimento Progressivo', tempoTotal: 12, exercicios: 3 },
-  { dia: 9, fase: 2, titulo: 'Mobilidade e Força', tempoTotal: 12, exercicios: 3 },
-  { dia: 10, fase: 2, titulo: 'Controle de Carga', tempoTotal: 12, exercicios: 3 },
-  { dia: 11, fase: 2, titulo: 'Força Lateral', tempoTotal: 12, exercicios: 3 },
-  { dia: 12, fase: 2, titulo: 'Agachamento Seguro', tempoTotal: 12, exercicios: 3 },
-  { dia: 13, fase: 2, titulo: 'Equilíbrio e Propriocepção', tempoTotal: 12, exercicios: 3 },
-  { dia: 14, fase: 2, titulo: 'Consolidação da Fase 2', tempoTotal: 12, exercicios: 3 },
-  
-  // FASE 3 - Dias 15 a 21
-  { dia: 15, fase: 3, titulo: 'Mecânica de Movimento', tempoTotal: 14, exercicios: 3 },
-  { dia: 16, fase: 3, titulo: 'Glúteo Médio Avançado', tempoTotal: 14, exercicios: 3 },
-  { dia: 17, fase: 3, titulo: 'Posições Seguras', tempoTotal: 14, exercicios: 3 },
-  { dia: 18, fase: 3, titulo: 'Movimentos que Aliviam', tempoTotal: 14, exercicios: 3 },
-  { dia: 19, fase: 3, titulo: 'Panturrilha e Estabilidade', tempoTotal: 14, exercicios: 3 },
-  { dia: 20, fase: 3, titulo: 'Evolução Controlada', tempoTotal: 14, exercicios: 3 },
-  { dia: 21, fase: 3, titulo: 'Revisão da Semana 3', tempoTotal: 14, exercicios: 3 },
-  
-  // FASE 4 - Dias 22 a 30
-  { dia: 22, fase: 4, titulo: 'Joelho Forte no Dia a Dia', tempoTotal: 15, exercicios: 3 },
-  { dia: 23, fase: 4, titulo: 'Força para Movimento', tempoTotal: 15, exercicios: 3 },
-  { dia: 24, fase: 4, titulo: 'Movimento Seguro', tempoTotal: 15, exercicios: 3 },
-  { dia: 25, fase: 4, titulo: 'Escadas sem Dor', tempoTotal: 15, exercicios: 3 },
-  { dia: 26, fase: 4, titulo: 'Construindo Estabilidade', tempoTotal: 15, exercicios: 3 },
-  { dia: 27, fase: 4, titulo: 'Base do Movimento', tempoTotal: 15, exercicios: 3 },
-  { dia: 28, fase: 4, titulo: 'Controle e Equilíbrio', tempoTotal: 15, exercicios: 3 },
-  { dia: 29, fase: 4, titulo: 'Consolidando Resultados', tempoTotal: 15, exercicios: 3 },
-  { dia: 30, fase: 4, titulo: 'Joelho Saudável para Sempre', tempoTotal: 15, exercicios: 3 },
-];
+const todosDias = [...dadosCondromalaciаFase1e2, ...dadosCondromalaciаFase3e4];
 
-const fases = [
-  { numero: 1, nome: 'Redução de Dor', cor: 'from-blue-500 to-cyan-500', dias: '1-7' },
-  { numero: 2, nome: 'Fortalecimento', cor: 'from-green-500 to-teal-500', dias: '8-14' },
-  { numero: 3, nome: 'Correção de Movimento', cor: 'from-orange-500 to-amber-500', dias: '15-21' },
-  { numero: 4, nome: 'Retorno à Função', cor: 'from-purple-500 to-pink-500', dias: '22-30' },
-];
-
-export default function CondromalaciaPage() {
-  const router = useRouter();
+export default function TrilhaCondromalaciаPage() {
   const [diasConcluidos, setDiasConcluidos] = useState<number[]>([]);
 
-  const handleIniciarDia = (dia: number) => {
-    const bloqueado = dia > 1 && !diasConcluidos.includes(dia - 1);
-    if (!bloqueado) {
-      router.push(`/trilhas/condromalaciа/dia/${dia}`);
-    }
+  const isDiaBloqueado = (dia: number) => {
+    if (dia === 1) return false;
+    return !diasConcluidos.includes(dia - 1);
   };
 
+  const isDiaConcluido = (dia: number) => {
+    return diasConcluidos.includes(dia);
+  };
+
+  const fases = [
+    { numero: 1, titulo: "Fase 1 — Reduzir dor e ativar musculatura", dias: [1, 2, 3, 4, 5, 6, 7] },
+    { numero: 2, titulo: "Fase 2 — Fortalecer quadríceps e glúteos", dias: [8, 9, 10, 11, 12, 13, 14] },
+    { numero: 3, titulo: "Fase 3 — Corrigir mecânica de movimento", dias: [15, 16, 17, 18, 19, 20, 21] },
+    { numero: 4, titulo: "Fase 4 — Retorno à função completa", dias: [22, 23, 24, 25, 26, 27, 28, 29, 30] }
+  ];
+
   return (
-    <div className="min-h-screen bg-[#F2F4F7] pb-24">
-      <Navigation />
-      
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-slate-900">
       {/* Header */}
-      <header className="bg-gradient-to-br from-[#2F66F2] to-[#70CFFF] text-white pt-12 pb-10 px-6">
-        <div className="max-w-md mx-auto">
-          <Link href="/trilhas" className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-4">
-            <ArrowLeft className="w-5 h-5" />
-            Voltar para trilhas
-          </Link>
-          <h1 className="text-3xl font-bold mb-3">Trilha Condromalácia</h1>
-          <p className="text-white/90 text-base leading-relaxed mb-4">
-            30 dias de exercícios terapêuticos para fortalecer os músculos que protegem sua patela e reduzir a dor.
-          </p>
-          
-          {/* Progresso */}
-          <div className="bg-white/20 rounded-xl p-4">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium">Seu progresso</span>
-              <span className="text-lg font-bold">{diasConcluidos.length}/30 dias</span>
-            </div>
-            <div className="bg-white/20 rounded-full h-2.5">
-              <div 
-                className="bg-white rounded-full h-2.5 transition-all duration-300" 
-                style={{ width: `${(diasConcluidos.length / 30) * 100}%` }}
-              />
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10">
+        <div className="max-w-4xl mx-auto px-4 py-4">
+          <div className="flex items-center gap-4">
+            <Link
+              href="/trilhas"
+              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </Link>
+            <div>
+              <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                Trilha Condromalácia
+              </h1>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                30 dias para fortalecer e proteger sua patela
+              </p>
             </div>
           </div>
         </div>
-      </header>
+      </div>
 
-      <main className="max-w-md mx-auto px-6 -mt-4">
-        {/* Fases */}
-        {fases.map((fase) => {
-          const diasDaFase = diasTrilha.filter(d => d.fase === fase.numero);
-          const diasConcluidosFase = diasDaFase.filter(d => diasConcluidos.includes(d.dia)).length;
-          
-          return (
-            <div key={fase.numero} className="mb-8">
-              {/* Header da Fase */}
-              <div className={`bg-gradient-to-r ${fase.cor} rounded-2xl p-5 mb-4 text-white shadow-lg`}>
-                <div className="flex items-center justify-between mb-2">
-                  <div>
-                    <h2 className="text-xl font-bold">Fase {fase.numero}</h2>
-                    <p className="text-white/90 text-sm">{fase.nome}</p>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-2xl font-bold">{diasConcluidosFase}/{diasDaFase.length}</div>
-                    <div className="text-xs text-white/80">Dias</div>
-                  </div>
-                </div>
-                <div className="bg-white/20 rounded-full h-1.5">
-                  <div 
-                    className="bg-white rounded-full h-1.5 transition-all duration-300" 
-                    style={{ width: `${(diasConcluidosFase / diasDaFase.length) * 100}%` }}
-                  />
-                </div>
-              </div>
+      {/* Progresso */}
+      <div className="max-w-4xl mx-auto px-4 py-6">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              Progresso da Trilha
+            </span>
+            <span className="text-sm font-bold text-blue-600 dark:text-blue-400">
+              {diasConcluidos.length}/30 dias
+            </span>
+          </div>
+          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+            <div
+              className="bg-gradient-to-r from-blue-500 to-cyan-500 h-3 rounded-full transition-all duration-500"
+              style={{ width: `${(diasConcluidos.length / 30) * 100}%` }}
+            />
+          </div>
+        </div>
+      </div>
 
-              {/* Dias da Fase */}
-              <div className="space-y-3">
-                {diasDaFase.map((dia) => {
-                  const concluido = diasConcluidos.includes(dia.dia);
-                  const bloqueado = dia.dia > 1 && !diasConcluidos.includes(dia.dia - 1);
-                  
-                  return (
-                    <button
-                      key={dia.dia}
-                      onClick={() => handleIniciarDia(dia.dia)}
-                      disabled={bloqueado}
-                      className={`w-full bg-white rounded-xl p-5 shadow-sm transition-all ${
-                        bloqueado
-                          ? 'opacity-50 cursor-not-allowed'
-                          : 'hover:shadow-md hover:scale-[1.02]'
-                      }`}
-                    >
-                      <div className="flex items-center gap-4">
-                        {/* Ícone do Dia */}
-                        <div className={`flex-shrink-0 w-14 h-14 rounded-xl flex items-center justify-center ${
-                          concluido
-                            ? 'bg-green-500'
-                            : bloqueado
-                            ? 'bg-gray-200'
-                            : `bg-gradient-to-br ${fase.cor}`
-                        }`}>
-                          {bloqueado ? (
-                            <Lock className="w-6 h-6 text-gray-400" />
-                          ) : concluido ? (
-                            <CheckCircle2 className="w-7 h-7 text-white" />
-                          ) : (
-                            <span className="text-white text-xl font-bold">{dia.dia}</span>
-                          )}
-                        </div>
-                        
-                        {/* Info do Dia */}
-                        <div className="flex-1 text-left">
-                          <h3 className="font-bold text-[#1C1C1C] mb-1">
-                            Dia {dia.dia} — {dia.titulo}
-                          </h3>
-                          <div className="flex items-center gap-3 text-sm text-gray-600">
-                            <div className="flex items-center gap-1">
-                              <TrendingUp className="w-4 h-4" />
-                              <span>{dia.exercicios} exercícios</span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <Clock className="w-4 h-4" />
-                              <span>{dia.tempoTotal} min</span>
-                            </div>
-                          </div>
-                        </div>
-                        
-                        {/* Status */}
-                        {concluido && (
-                          <div className="flex-shrink-0">
-                            <span className="inline-block bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">
-                              Concluído
-                            </span>
-                          </div>
+      {/* Fases e Dias */}
+      <div className="max-w-4xl mx-auto px-4 pb-8 space-y-8">
+        {fases.map((fase) => (
+          <div key={fase.numero}>
+            <div className="mb-4">
+              <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">
+                {fase.titulo}
+              </h2>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Dias {fase.dias[0]} a {fase.dias[fase.dias.length - 1]}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {fase.dias.map((dia) => {
+                const bloqueado = isDiaBloqueado(dia);
+                const concluido = isDiaConcluido(dia);
+                const dadosDia = todosDias.find((d) => d.dia === dia);
+
+                return (
+                  <Link
+                    key={dia}
+                    href={bloqueado ? "#" : `/trilhas/condromalaciа/dia/${dia}`}
+                    className={`
+                      block bg-white dark:bg-gray-800 rounded-xl p-5 border-2 transition-all
+                      ${bloqueado
+                        ? "border-gray-200 dark:border-gray-700 opacity-60 cursor-not-allowed"
+                        : concluido
+                        ? "border-green-500 dark:border-green-600 shadow-sm"
+                        : "border-blue-500 dark:border-blue-600 shadow-md hover:shadow-lg hover:scale-[1.02]"
+                      }
+                    `}
+                    onClick={(e) => bloqueado && e.preventDefault()}
+                  >
+                    <div className="flex items-start justify-between mb-3">
+                      <div>
+                        <h3 className="font-bold text-gray-900 dark:text-gray-100">
+                          Dia {dia}
+                        </h3>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                          {dadosDia?.exercicios.length || 3} exercícios + 1 aula
+                        </p>
+                      </div>
+                      <div>
+                        {bloqueado ? (
+                          <Lock className="w-5 h-5 text-gray-400" />
+                        ) : concluido ? (
+                          <CheckCircle2 className="w-6 h-6 text-green-500" />
+                        ) : (
+                          <Play className="w-6 h-6 text-blue-500" />
                         )}
                       </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          );
-        })}
+                    </div>
 
-        {/* Motivação */}
-        <div className="bg-gradient-to-br from-[#2F66F2]/10 to-[#70CFFF]/10 rounded-2xl p-6 mb-6">
-          <h3 className="font-bold text-[#1C1C1C] mb-3 flex items-center gap-2">
-            💙 Você está no caminho certo!
-          </h3>
-          <p className="text-sm text-gray-700 leading-relaxed">
-            Cada dia desta trilha foi cuidadosamente planejado para fortalecer seu joelho de forma progressiva e segura. 
-            Continue praticando e você verá resultados reais em poucas semanas.
-          </p>
-        </div>
-      </main>
+                    <div className="space-y-2">
+                      {dadosDia?.exercicios.slice(0, 3).map((ex, idx) => (
+                        <div key={idx} className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                          <Circle className="w-3 h-3 fill-current" />
+                          <span className="truncate">{ex.titulo}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {!bloqueado && !concluido && (
+                      <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                        <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
+                          Começar dia →
+                        </span>
+                      </div>
+                    )}
+
+                    {concluido && (
+                      <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                        <span className="text-sm font-medium text-green-600 dark:text-green-400">
+                          ✓ Concluído
+                        </span>
+                      </div>
+                    )}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Botão Plano de Crise */}
+      <div className="fixed bottom-6 right-6">
+        <Link
+          href="/plano-crise"
+          className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-full shadow-lg font-medium transition-all hover:scale-105"
+        >
+          🚨 Plano de Crise
+        </Link>
+      </div>
     </div>
   );
 }
